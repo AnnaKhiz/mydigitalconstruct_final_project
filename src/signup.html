@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="./js/index.js" defer></script>
+  <!--	<script src="bootstrap/bootstrap.min.js" defer></script>-->
+  <!--	<link rel="stylesheet" href="bootstrap/bootstrap.min.css">-->
+  <link rel="stylesheet" href="css/style.css">
+  <title>Dashboard</title>
+</head>
+
+<body>
+<div class="container-fluid text-center">
+  <header class="header-nav shadow">
+    <h4>Dashboard system</h4>
+    <nav class="nav-list">
+      <a href="#">Sign up</a>
+      <a href="#">Sign in</a>
+    </nav>
+  </header>
+  <main class="row justify-content-start bg-main">
+    <section class="col-6 p-0 image-container">
+      <img src="assets/img/bg_signin.png" alt="background image">
+    </section>
+    <section class="col-6 text-white text-start d-flex justify-center align-items-center py-4 px-12">
+      <div class="p-4 w-100">
+        <h3 class="mb-2">Nice to see you!</h3>
+        <p class="mb-4">Enter your email and password to sign in</p>
+
+        <form action="#">
+          <div class="mb-3">
+            <label for="email-log" class="d-block mb-1">Email</label>
+            <input
+              type="email"
+              placeholder="Your email address"
+              id="email-log"
+              class="form-hover w-100 px-3 py-2 bg-transparent rounded-4 text-white shadow"
+            >
+          </div>
+
+          <div class="mb-4">
+            <label for="password-log" class="d-block mb-1">Password</label>
+            <input
+              type="email"
+              placeholder="Your password"
+              id="password-log"
+              class="form-hover w-100 px-3 py-2 bg-transparent rounded-4 text-white shadow"
+            >
+          </div>
+
+          <button class="button-hover px-3 py-2 rounded-4 w-100 mb-4 text-white bg-primary text-uppercase">
+            Sign in
+          </button>
+        </form>
+
+        <p class="text-center text-secondary fw-bold">Already have an account? <a href="/" class="link-hover text-white">Sign in</a></p>
+      </div>
+
+    </section>
+  </main>
+</div>
+</body>
+</html>
