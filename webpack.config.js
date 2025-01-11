@@ -8,9 +8,11 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    clean: true
   },
   module: {
     rules: [
+      
       {
         test: /\.css$/i,
         use: [
@@ -33,12 +35,25 @@ module.exports = {
           filename: 'assets/img/[name][ext][query]',
         },
       },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/fonts/[name][ext]',
+        },
+      },
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin(
+      {
       template: './src/index.html',
+      filename: 'index.html'
     }),
+      new HtmlWebpackPlugin({
+        template: './src/signup.html',
+        filename: 'signup.html'
+      }),
     new MiniCssExtractPlugin({
       filename: 'styles.css',
     }),
