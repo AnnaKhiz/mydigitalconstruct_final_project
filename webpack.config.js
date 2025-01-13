@@ -54,6 +54,10 @@ module.exports = {
         template: './src/signup.html',
         filename: 'signup.html'
       }),
+    new HtmlWebpackPlugin({
+      template: './src/main.html',
+      filename: 'main.html'
+    }),
     new MiniCssExtractPlugin({
       filename: 'styles.css',
     }),

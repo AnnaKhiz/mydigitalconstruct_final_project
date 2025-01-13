@@ -25,12 +25,12 @@
 		<section class="col-6 p-0 image-container">
 			<img src="assets/img/bg_signin.png" alt="background image">
 		</section>
-		<section class="col-6 text-white text-start d-flex justify-center align-items-center py-4 px-12">
+		<section class="col-6 text-white text-start d-flex justify-center align-items-center py-4 px-40">
 			<div class="p-4 w-100">
 				<h3 class="mb-2">Nice to see you!</h3>
-				<p class="mb-4">Enter your email and password to sign in</p>
+				<p class="mb-8">Enter your email and password to sign in</p>
 
-				<form action="#">
+				<form action="#" class="login-form">
 					<div class="mb-3">
 						<label for="email-log" class="d-block mb-1">Email</label>
 						<input 
@@ -41,7 +41,7 @@
             >
 					</div>
 
-					<div class="mb-4">
+					<div class="mb-12">
 						<label for="password-log" class="d-block mb-1">Password</label>
 						<input 
               type="email" 
@@ -50,8 +50,9 @@
               class="form-hover w-100 px-3 py-2 bg-transparent rounded-4 text-white shadow"
             >
 					</div>
+          <p class="message-block" id="message-block"></p>
 
-					<button class="button-hover px-3 py-2 rounded-4 w-100 mb-4 text-white bg-primary text-uppercase">
+					<button class="button-hover px-3 py-2 rounded-4 w-100 mb-4 text-white bg-primary text-uppercase" id="sign-in-button">
 						Sign in
 					</button>
 				</form>
