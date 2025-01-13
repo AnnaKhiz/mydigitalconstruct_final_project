@@ -3,7 +3,8 @@
 
 :root {
 	--bg-main-gradient: linear-gradient(0deg, rgba(15,18,59,1) 0%, rgba(9,13,46,1) 59%, rgba(2,5,21,1) 100%);
-	--space: 1rem;
+	--warn-red: red;
+  --success: green;
 }
 
 body {
@@ -29,12 +30,20 @@ body {
   }
 }
 
+.login-form {
+  position: relative;
+}
 
-//.px-10 {
-//	padding-left: 10%;
-//	padding-right: 10%;
-//}
-
+.message-block {
+  position: absolute;
+  top: 65%;
+  left: 5px;
+  font-size: 0.875rem;
+  color: var(--warn-red);
+  &.success {
+    color: var(--success)
+  }
+}
 
 
 .bg-main {
