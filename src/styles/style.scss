@@ -43,6 +43,9 @@ body {
   &.success {
     color: var(--success)
   }
+  &.reg {
+    top: 73%;
+  }
 }
 
 
@@ -82,7 +85,7 @@ body {
 			text-transform: uppercase;
 			color: #fff;
 			transition: all 0.5s ease-in-out 0s;
-			&:hover {
+			&:hover, &.active {
 				color: #cccccc;
 				border-bottom: 1px solid #cccccc;
 			}
