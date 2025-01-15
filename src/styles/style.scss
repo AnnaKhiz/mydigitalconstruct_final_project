@@ -1,14 +1,28 @@
 @import "fonts.scss";
 @import "reset";
+@import "main";
 
 :root {
 	--bg-main-gradient: linear-gradient(0deg, rgba(15,18,59,1) 0%, rgba(9,13,46,1) 59%, rgba(2,5,21,1) 100%);
+  --bg-grid-items-gradient: linear-gradient(0deg, rgba(26,31,55,0) 0%, rgba(6,11,38,0.94) 100%);
 	--warn-red: red;
   --success: green;
+  --dark-blue: #1A1F37;
+  --white: #ffffff;
+  --main-blue: #0075FF;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
+  scrollbar-width: 0;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.hidden {
+  display: none;
 }
 
 .form-hover {
@@ -43,6 +57,9 @@ body {
   &.success {
     color: var(--success)
   }
+  &.reg {
+    top: 73%;
+  }
 }
 
 
@@ -50,6 +67,11 @@ body {
 	height: 100vh;
   overflow: hidden;
 	background: var(--bg-main-gradient);
+  &.image {
+    padding: 20px;
+    background-image: url("../assets/img/bg_main.png");
+    background-position: 30% 100%;
+  }
 }
 
 .header-nav {
@@ -82,7 +104,7 @@ body {
 			text-transform: uppercase;
 			color: #fff;
 			transition: all 0.5s ease-in-out 0s;
-			&:hover {
+			&:hover, &.active {
 				color: #cccccc;
 				border-bottom: 1px solid #cccccc;
 			}
