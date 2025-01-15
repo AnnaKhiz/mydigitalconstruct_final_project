@@ -1,33 +1,33 @@
 import { validateForm } from "./validation";
-
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.location.href === '/') {
+  if (document.location.pathname === '/') {
     const emailElement = document.getElementById('email-log');
     const passwordElement = document.getElementById('password-log');
     const signInButton = document.getElementById('sign-in-button');
     const messageBlockLog = document.getElementById('message-block');
-
+    
     signInButton.addEventListener('click', async (event) => {
       event.preventDefault();
+      console.log('sign in clicked')
 
       const emailValue = emailElement.value;
       const passwordValue = passwordElement.value;
 
       if (!validateForm(messageBlockLog, emailValue, passwordValue)) return;
 
-      await signIn(emailValue, passwordValue);
+      await signIn();
 
     })
 
-    async function signIn(emailValue, passwordValue) {
+    async function signIn() {
       try {
         const result = await fetch('https://reqres.in/api/login', {
           method: 'POST',
           body: JSON.stringify({
-            // email: 'eve.holt@reqres.in',
-            // password: '123123'
-            email: emailValue,
-            password: passwordValue
+            email: 'eve.holt@reqres.in',
+            password: '123123'
+            // email: emailValue,
+            // password: passwordValue
           }),
           headers: {'Content-Type': 'application/json'}
         })

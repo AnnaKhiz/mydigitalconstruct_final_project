@@ -1,3 +1,5 @@
+$root: &;
+
 .aside-container {
   min-width: 20%;
   border-radius: 20px;
@@ -6,6 +8,43 @@
   background: var(--bg-grid-items-gradient);
   
   
+}
+.svg-container {
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--dark-blue);
+  box-shadow: 2px 2px 10px rgb(51, 57, 100);
+}
+
+.navigation-list {
+  & ul > li {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px 20px;
+    &:hover {
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 2px 2px 10px rgb(72, 79, 114);
+      background: var(--dark-blue);
+      #{$root} path.svg-path {
+        fill: white;
+      }
+      #{$root} .svg-container {
+        background: var(--main-blue);
+        box-shadow: 2px 2px 20px rgb(72, 79, 114);
+      }
+    }
+    & > a {
+      display: block;
+      padding: 15px;
+      color: var(--white);
+    }
+    &:not(:last-of-type) {
+      margin-bottom: 10px;
+    }
+  }
+    
 }
 
 .aside-title {
@@ -32,7 +71,7 @@
   grid-template-rows: repeat(8, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
-  padding: 20px;
+  padding: 20px 0 0 20px;
 }
 
 .dashboard-container {
@@ -41,7 +80,7 @@
 
 .grid-item {
   border-radius: 20px;
-  padding: 10px;
+  padding: 20px 20px;
   box-shadow: 2px 2px 10px rgb(72, 79, 114);
   background: linear-gradient(0deg, rgba(9,13,46,0.74) 0%, rgba(6,11,40,0.71) 100%);
   
