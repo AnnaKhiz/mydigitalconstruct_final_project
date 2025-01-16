@@ -3,5 +3,6 @@ import 'bootstrap';
 import '../styles/style.scss';
 import './modules/signIn.js';
 import './modules/signUp.js';
+import './modules/chart.js';
 
 
