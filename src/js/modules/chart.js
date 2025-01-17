@@ -5,7 +5,6 @@ const canvasDoughnut = document.getElementById('my-chart-doughnut');
 const ctx = canvas.getContext('2d');
 const ctxD = canvasDoughnut.getContext('2d');
 
-
 const gradient = ctx.createLinearGradient(0, 0, 0, 400);
 gradient.addColorStop(0, 'rgba(15,18,59,0.5)');
 gradient.addColorStop(1, 'rgba(0,117,255,0.74)');
@@ -88,6 +87,7 @@ new Chart(ctxD, {
     responsive: true,
     plugins: {
       legend: {
+        // position: 'right'
         display: false
       }
     },
