@@ -5,14 +5,20 @@ import {
   descriptionElement,
   authorElement,
   statusElement,
-  saveProjectButton,
   checkEmptyFields,
-  errorMessage, modalTitle, closeModal
+  errorMessage, 
+  modalTitle, 
+  closeModal,
+  addArticle
 } from "./modal";
 
-const projectsList = document.getElementById('projects-list');
+export const projectsList = document.getElementById('projects-list');
 const noProjectsNotify = document.getElementById('no-projects-notify');
 const tableElement = document.getElementById('projects-table');
+
+let checkedProject;
+let checkedProjectIndex;
+
 export function renderProjectsData() {
   const projects = getAllProjects();
 
@@ -89,52 +95,105 @@ export function finishProject() {
   })
 }
 
-export function editProject() {
-  projectsList.addEventListener('click', (event) => {
-    
-    event.preventDefault();
-    const projectId = +event.target.dataset.edit;
+export function editProject(id) {
+  // projectsList.addEventListener('click', (event) => {
+  //   event.preventDefault();
+    const projectId = +id;
     const projects = getAllProjects();
-
     if (!projects.length) return;
+    
+    console.log('EDIT PROJECT')
 
-    const index = projects.findIndex(project => +project.id === projectId);
-    console.log(index)
-    
-    if(index === -1) return;
-    
-    // const selectedProject = projects.find(project => +project.id === projectId);
-    // console.log(selectedProject)
-    
-    titleElement.value = projects[index].title;
-    descriptionElement.value = projects[index].description;
-    authorElement.value = projects[index].author;
-    statusElement.value = projects[index].status;
+    checkedProjectIndex = projects.findIndex(project => +project.id === projectId);
+    console.log(checkedProjectIndex)
+    if(checkedProjectIndex === -1) return;
+
+    checkedProject = projects[checkedProjectIndex];
+    titleElement.value = checkedProject.title;
+    descriptionElement.value = checkedProject.description;
+    authorElement.value = checkedProject.author;
+    statusElement.value = checkedProject.status;
 
     openModal();
-    saveProjectButton.innerText = 'Save changes';
-    modalTitle.innerText = 'Edit project';
-
-    if (saveProjectButton.innerText !== 'Save changes') return;
+    const saveChangesButton = document.getElementById('save-changes');
+    const saveProjectButton = document.getElementById('save-project');
+    saveProjectButton.classList.add('hidden')
+    saveChangesButton.classList.remove('hidden')
+  
+    console.log(saveChangesButton)
     
-    saveProjectButton.addEventListener('click', (event) => {
-      projects[index] = { 
-        id: projects[index].id, 
-        title: titleElement.value, 
-        description: descriptionElement.value, 
+    
+    modalTitle.innerText = 'Edit project';
+    
+    addArticle.disabled = false;
+
+    saveChangesButton.addEventListener('click', () => {
+      projects[checkedProjectIndex] = {
+        id: checkedProject.id,
+        title: titleElement.value,
+        description: descriptionElement.value,
         author: authorElement.value,
-        status: statusElement.value
+        status: statusElement.value,
+        articles: checkedProject.articles
       }
-      
-      console.log(projects[index])
 
       if (!checkEmptyFields(titleElement.value, descriptionElement.value, authorElement.value, statusElement.value)) return;
 
-      console.log(projects)
       localStorage.setItem('db_projects', JSON.stringify(projects));
       renderProjectsData();
-      closeModal()
+      closeModal();
     })
+    
+  
 
+  addArticle.addEventListener('click', (e) => {
+    const articleTitle = document.getElementById('article-title');
+    const articleDescription = document.getElementById('article-desc');
+    const errorContainer = document.getElementById('modal-article-error');
+
+    const projects = getAllProjects();
+    if (!projects.length) return;
+
+    if(!checkEmptyFields(articleTitle.value, articleDescription.value)) {
+      errorContainer.innerText = 'Empty fields';
+      return
+    };
+    
+    const articles = projects[checkedProjectIndex].articles;
+
+    let currentId;
+    
+    if (!articles.length) {
+      projects[checkedProjectIndex].articles.push({
+        id: checkedProject.id + '_' + 1,
+        title: articleTitle.value,
+        description: articleDescription.value
+      })
+
+      localStorage.setItem('db_projects', JSON.stringify(projects));
+      
+    } else {
+      currentId = articles.at(-1).id;
+      projects[checkedProjectIndex].articles.push({
+        id: checkedProject.id + '_' + (++currentId),
+        title: articleTitle.value,
+        description: articleDescription.value
+      })
+
+      localStorage.setItem('db_projects', JSON.stringify(projects));
+    }
+    
+    
+    
+    
+    console.log(checkedProject)
+    console.log('add article')
+    // addNewArticle()
   })
+  
+  
+}
+
+function editProjectHandler() {
+  
 }

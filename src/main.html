@@ -122,9 +122,7 @@
             <p class="mb-2">
               Projects quantity
             </p>
-            <p class="fs-1 text-primary">
-              1000
-            </p>
+            <p class="fs-1 text-primary" id="projects-quantity"></p>
           </div>
           <div class="icon-container p-2 bg-primary rounded">
             <img class="w-100" src="./assets/img/icons/project.png" alt="project image">
@@ -187,16 +185,16 @@
          
           <canvas class="w-100 h-100" id="my-chart-linear"></canvas>
         </div>
-        <div class="item11 grid-item">
-          <div class="d-flex justify-content-between align-items-start ">
+        <div class="item11 grid-item" id="projects-container">
+          <div class="d-flex justify-content-between align-items-start " data-callmodal="call">
             <div>
               <h3 class="mb-2">Projects</h3>
                 <img src="./assets/img/icons/mark.svg" alt="mark icon">
               <span class="text-secondary fw-bold">30 done this month</span>
             </div>
             
-            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              <img src="./assets/img/icons/more_vert.svg" alt="more button">
+            <button type="button" class="btn btn-dark" data-callmodal="call" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <img src="./assets/img/icons/more_vert.svg" alt="more button" data-callmodal="call"  >
             </button>
             
           </div>
@@ -206,7 +204,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="modal-title"></h5>
+                  <h5 class="modal-title" id="modal-title">Add article</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -251,8 +249,19 @@
                 <div class="modal-footer justify-content-between">
                   <p id="modal-error" class="text-start text-danger fs-6"></p>
                   <div>
+                    <button 
+                      type="button" 
+                      class="btn btn-warning" 
+                      data-bs-toggle="modal" 
+                      data-bs-target="#exampleModalArticle" 
+                      id="add-article" 
+                      disabled
+                    >
+                      Add new article
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="save-project"></button>
+                    <button type="button" class="btn btn-primary hidden" id="save-project">Save project</button>
+                    <button type="button" class="btn btn-primary hidden" id="save-changes">Save changes</button>
                   </div>
                 </div>
               </div>
@@ -348,6 +357,50 @@
           
           
         </div>
+        
+        
+        <!-- Modal add article -->
+
+        <div class="modal fade" id="exampleModalArticle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="article-title" class="form-label">Title</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="article-title"
+                    placeholder="Enter article name..."
+                  >
+                </div>
+                <div class="mb-3">
+                  <label for="article-desc" class="form-label">Description</label>
+                  <textarea
+                    class="form-control"
+                    id="article-desc"
+                    rows="3"
+                    placeholder="Enter article description..."
+                  ></textarea>
+                </div>
+              </div>
+              <div class="modal-footer justify-content-between">
+                <p id="modal-article-error" class="text-start text-danger fs-6"></p>
+                <div>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="save-article">Save changes</button>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
       </div>
     </section>
   </div>
