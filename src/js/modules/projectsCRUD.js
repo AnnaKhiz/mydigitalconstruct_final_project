@@ -1,3 +1,15 @@
+import {
+  openModal,
+  addNewProject,
+  titleElement,
+  descriptionElement,
+  authorElement,
+  statusElement,
+  saveProjectButton,
+  checkEmptyFields,
+  errorMessage, modalTitle, closeModal
+} from "./modal";
+
 const projectsList = document.getElementById('projects-list');
 const noProjectsNotify = document.getElementById('no-projects-notify');
 const tableElement = document.getElementById('projects-table');
@@ -74,5 +86,55 @@ export function finishProject() {
     localStorage.setItem('db_projects', JSON.stringify(projects));
 
     renderProjectsData();
+  })
+}
+
+export function editProject() {
+  projectsList.addEventListener('click', (event) => {
+    
+    event.preventDefault();
+    const projectId = +event.target.dataset.edit;
+    const projects = getAllProjects();
+
+    if (!projects.length) return;
+
+    const index = projects.findIndex(project => +project.id === projectId);
+    console.log(index)
+    
+    if(index === -1) return;
+    
+    // const selectedProject = projects.find(project => +project.id === projectId);
+    // console.log(selectedProject)
+    
+    titleElement.value = projects[index].title;
+    descriptionElement.value = projects[index].description;
+    authorElement.value = projects[index].author;
+    statusElement.value = projects[index].status;
+
+    openModal();
+    saveProjectButton.innerText = 'Save changes';
+    modalTitle.innerText = 'Edit project';
+
+    if (saveProjectButton.innerText !== 'Save changes') return;
+    
+    saveProjectButton.addEventListener('click', (event) => {
+      projects[index] = { 
+        id: projects[index].id, 
+        title: titleElement.value, 
+        description: descriptionElement.value, 
+        author: authorElement.value,
+        status: statusElement.value
+      }
+      
+      console.log(projects[index])
+
+      if (!checkEmptyFields(titleElement.value, descriptionElement.value, authorElement.value, statusElement.value)) return;
+
+      console.log(projects)
+      localStorage.setItem('db_projects', JSON.stringify(projects));
+      renderProjectsData();
+      closeModal()
+    })
+
   })
 }

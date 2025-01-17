@@ -194,11 +194,11 @@
                 <img src="./assets/img/icons/mark.svg" alt="mark icon">
               <span class="text-secondary fw-bold">30 done this month</span>
             </div>
-            <div>
-              <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="./assets/img/icons/more_vert.svg" alt="more button">
-              </button>
-            </div>
+            
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <img src="./assets/img/icons/more_vert.svg" alt="more button">
+            </button>
+            
           </div>
           
           <!-- Modal add project -->
@@ -206,12 +206,12 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Add new project</h1>
+                  <h5 class="modal-title" id="modal-title"></h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                   <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Project name</label>
+                    <label for="exampleFormControlInput1" class="form-label">Name</label>
                     <input 
                       type="text" 
                       class="form-control" 
@@ -220,7 +220,7 @@
                     >
                   </div>
                   <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Project description</label>
+                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
                     <textarea 
                       class="form-control" 
                       id="exampleFormControlTextarea1" 
@@ -245,7 +245,6 @@
                       max="100"
                       class="form-control"
                       id="exampleFormControlInput3"
-                      value="0"
                     >
                   </div>
                 </div>
@@ -253,7 +252,7 @@
                   <p id="modal-error" class="text-start text-danger fs-6"></p>
                   <div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="save-project">Save projects</button>
+                    <button type="button" class="btn btn-primary" id="save-project"></button>
                   </div>
                 </div>
               </div>
