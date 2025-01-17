@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     signInButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      console.log('sign in clicked')
-
       const emailValue = emailElement.value;
       const passwordValue = passwordElement.value;
 
