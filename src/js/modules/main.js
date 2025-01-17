@@ -1,10 +1,11 @@
 import './chart.js';
 import { addNewProject } from './modal';
-import { renderProjectsData, removeProject } from "./projectsCRUD";
+import { renderProjectsData, removeProject, finishProject } from "./projectsCRUD";
 
 document.addEventListener('DOMContentLoaded', () => {
   renderProjectsData()
   removeProject()
+  finishProject()
   
   if (document.location.href.includes('main.html')) {
     
