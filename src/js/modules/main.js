@@ -9,11 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 function logOut() {
-  const logoutEl = document.getElementById('logout');
+  const logoutEl = [...document.querySelectorAll('[data-id="logout"]')];
 
-  logoutEl.addEventListener('click', (event) => {
-    event.preventDefault();
-    localStorage.removeItem('db_token');
-    document.location.href = '/';
+  document.addEventListener('click', (event) => {
+    if (event.target.dataset.id === 'logout') {
+      localStorage.removeItem('db_token');
+      document.location.href = '/';
+    }
+    
   })
 }
