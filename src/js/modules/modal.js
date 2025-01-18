@@ -19,7 +19,6 @@ dialogElement.addEventListener('hide.bs.modal', (e) => {
 })
 
 dialogElement.addEventListener('show.bs.modal', (e) => {
-   
   modalTitle.innerText = 'Add new project';
   addArticle.disabled = true;
   console.log('modal here')

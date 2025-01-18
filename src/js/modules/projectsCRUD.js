@@ -18,10 +18,46 @@ const noProjectsNotify = document.getElementById('no-projects-notify');
 const tableElement = document.getElementById('projects-table');
 const projectsQuantity = document.getElementById('projects-quantity');
 const articlesQuantity = document.getElementById('articles-quantity');
+const articlesContainer = document.getElementById('articles-container');
+const articlesList = document.getElementById('articles-list');
+const totalQuantity = document.getElementById('total-quantity');
 
 let checkedProject;
 let checkedProjectIndex;
 
+export function renderArticles(id) {
+  const projects = getAllProjects();
+  
+  if (!projects.length) return;
+  
+  const currentProject = projects.find(el => el.id === +id);
+  
+  if (!currentProject) return;
+
+  const projectsArticles = currentProject.articles;
+  
+  if (!projectsArticles.length) {
+    articlesList.innerHTML = '';
+    articlesList.insertAdjacentHTML('beforeend', `No articles in this project`)
+    return;
+  }
+
+  articlesList.innerHTML = '';
+  articlesList.insertAdjacentHTML('beforeend', `
+    ${projectsArticles.map(article => `
+        <div class="card card-item">
+          <img src="./assets/img/card.jpg" class="card-img-top" alt="image">
+          <div class="card-body">
+            <h5 class="card-title fs-5 text-truncate">${article.title}</h5>
+            <p class="card-text text-truncate mb-4 fs-6" >${article.description}</p>
+            <a href="#" class="d-block btn btn-primary btn-sm">Open</a>
+          </div>
+        </div>
+    `).join('')}
+  `)
+  
+  console.log('projectsArticles', projectsArticles)
+}
 export function renderProjectsData() {
   const projects = getAllProjects();
 
@@ -36,10 +72,11 @@ export function renderProjectsData() {
   projectsList.innerHTML = '';
   
   projectsQuantity.innerText = projects.length;
+  totalQuantity.innerText = projects.length + getAllArticlesQuantity();
   
   projectsList.insertAdjacentHTML('beforeend', `
     ${projects.map(project =>
-    `<tr class="${+project.status === 100 ? 'opacity-50' : 'opacity-100'}" data-trow="${project.id}">
+    `<tr class="${+project.status === 100 ? 'opacity-50' : 'opacity-100'} table-row" data-tablerow="${project.id}" >
         <th scope="row">${project.id}</th>
         <td class="text-truncate">${project.title}</td>
         <td class="text-truncate" style="max-width: 150px;">${project.description}</td>
@@ -74,12 +111,12 @@ export function getAllArticlesQuantity() {
   const projects = getAllProjects();
   let articles = 0;
   projects.forEach(project => {
-    console.log(project.articles.length)
+    // console.log(project.articles.length)
     articles += project.articles.length ? project.articles.length : 0
-    console.log(articles)
+    // console.log(articles)
   })
   
-  console.log(articles)
+  // console.log(articles)
   
   return articles
 }
@@ -96,10 +133,14 @@ export function removeProject() {
     projects.splice(index, 1);
     projectsQuantity.innerText = projects.length;
     
+    
     localStorage.setItem('db_projects', JSON.stringify(projects));
     renderProjectsData();
 
-    articlesQuantity.innerText = getAllArticlesQuantity()
+    const articles = getAllArticlesQuantity()
+    articlesQuantity.innerText = articles
+
+    totalQuantity.innerText = projects.length + articles;
   })
 }
 
@@ -167,7 +208,10 @@ export function editProject(id) {
       
       localStorage.setItem('db_projects', JSON.stringify(projects));
       projectsQuantity.innerText = projects.length;
-      articlesQuantity.innerText = getAllArticlesQuantity()
+      const articles = getAllArticlesQuantity();
+      articlesQuantity.innerText = articles;
+
+      totalQuantity.innerText = projects.length + articles;
       renderProjectsData();
       closeModal('exampleModal');
     })
@@ -242,8 +286,14 @@ function addArticleHandler() {
 
   }
   localStorage.setItem('db_projects', JSON.stringify(projects));
+
+  
+  renderArticles(checkedProjectIndex)
   projectsQuantity.innerText = projects.length;
-  articlesQuantity.innerText = getAllArticlesQuantity()
+  const articlesNumber = getAllArticlesQuantity();
+  articlesQuantity.innerText = articlesNumber;
+
+  totalQuantity.innerText = projects.length + articlesNumber;
   renderProjectsData();
   closeModal('exampleModalArticle');
   saveArticle.removeEventListener('click', addArticleHandler)
