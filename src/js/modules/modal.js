@@ -11,7 +11,6 @@ export const modalTitle = document.getElementById('modal-title');
 const dialogElement = document.getElementById('exampleModal');
 
 export const addArticle = document.getElementById('add-article');
-
 dialogElement.addEventListener('hide.bs.modal', (e) => {
   titleElement.value = '';
   descriptionElement.value = '';
@@ -58,7 +57,7 @@ export function addNewProject() {
         sortedProjects.push({ id: ++currentId, title, description, author, status, articles: []  });
         localStorage.setItem('db_projects', JSON.stringify(sortedProjects));
       }
-
+      
       renderProjectsData();
 
       titleElement.value = '';
@@ -66,7 +65,8 @@ export function addNewProject() {
       closeModal('exampleModal');
   }
   )
-
+  
+  
   
 }
 

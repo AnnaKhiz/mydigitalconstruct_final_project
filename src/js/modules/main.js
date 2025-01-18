@@ -1,15 +1,14 @@
 import './chart.js';
-import {addNewProject, openModal} from './modal';
-import {renderProjectsData, removeProject, finishProject, editProject, getAllProjects, projectsList} from "./projectsCRUD";
+import {addNewProject, openModal, } from './modal';
+import {renderProjectsData, removeProject, finishProject, editProject, getAllProjects, getAllArticlesQuantity, projectsList} from "./projectsCRUD";
 
 const projectsQuantity = document.getElementById('projects-quantity');
 const projectsContainer = document.getElementById('projects-container');
+const articlesQuantity = document.getElementById('articles-quantity');
 
 document.addEventListener('DOMContentLoaded', () => {
-  const projects = getAllProjects();
-
-  projectsQuantity.innerText = !projects.length ? '0' : projects.length;
-  
+  projectsQuantity.innerText = !getAllProjects().length ? '0' : getAllProjects().length;
+  articlesQuantity.innerText = !getAllArticlesQuantity() ? '0' : getAllArticlesQuantity()
   projectsContainer.addEventListener('click', (e) => {
     // e.preventDefault()
     // console.log(e.target.dataset)
