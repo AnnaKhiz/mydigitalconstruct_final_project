@@ -10,6 +10,7 @@ import {
   modalTitle, 
   closeModal,
   addArticle
+  
 } from "./modal";
 
 export const projectsList = document.getElementById('projects-list');
@@ -98,6 +99,7 @@ export function finishProject() {
 export function editProject(id) {
   // projectsList.addEventListener('click', (event) => {
   //   event.preventDefault();
+  errorMessage.innerText = '';
     const projectId = +id;
     const projects = getAllProjects();
     if (!projects.length) return;
@@ -120,14 +122,16 @@ export function editProject(id) {
     saveProjectButton.classList.add('hidden')
     saveChangesButton.classList.remove('hidden')
   
-    console.log(saveChangesButton)
-    
-    
+    // console.log(saveChangesButton)
     modalTitle.innerText = 'Edit project';
-    
     addArticle.disabled = false;
 
     saveChangesButton.addEventListener('click', () => {
+      console.log('titleElement.value', titleElement.value)
+      console.log('checkedProject ------', checkedProject)
+      
+      if (!checkEmptyFields(titleElement.value, descriptionElement.value, authorElement.value, statusElement.value)) return;
+      
       projects[checkedProjectIndex] = {
         id: checkedProject.id,
         title: titleElement.value,
@@ -136,64 +140,143 @@ export function editProject(id) {
         status: statusElement.value,
         articles: checkedProject.articles
       }
-
-      if (!checkEmptyFields(titleElement.value, descriptionElement.value, authorElement.value, statusElement.value)) return;
-
+      
       localStorage.setItem('db_projects', JSON.stringify(projects));
       renderProjectsData();
-      closeModal();
+      closeModal('exampleModal');
     })
-    
   
-
-  addArticle.addEventListener('click', (e) => {
-    const articleTitle = document.getElementById('article-title');
-    const articleDescription = document.getElementById('article-desc');
-    const errorContainer = document.getElementById('modal-article-error');
-
-    const projects = getAllProjects();
-    if (!projects.length) return;
-
-    if(!checkEmptyFields(articleTitle.value, articleDescription.value)) {
-      errorContainer.innerText = 'Empty fields';
-      return
-    };
-    
-    const articles = projects[checkedProjectIndex].articles;
-
-    let currentId;
-    
-    if (!articles.length) {
-      projects[checkedProjectIndex].articles.push({
-        id: checkedProject.id + '_' + 1,
-        title: articleTitle.value,
-        description: articleDescription.value
-      })
-
-      localStorage.setItem('db_projects', JSON.stringify(projects));
-      
-    } else {
-      currentId = articles.at(-1).id;
-      projects[checkedProjectIndex].articles.push({
-        id: checkedProject.id + '_' + (++currentId),
-        title: articleTitle.value,
-        description: articleDescription.value
-      })
-
-      localStorage.setItem('db_projects', JSON.stringify(projects));
-    }
-    
-    
-    
-    
-    console.log(checkedProject)
-    console.log('add article')
-    // addNewArticle()
-  })
+  addArticle.addEventListener('click', addNewArticle)
   
   
 }
 
-function editProjectHandler() {
+function addNewArticle() {
   
+  const articleTitle = document.getElementById('article-title');
+  const articleDescription = document.getElementById('article-desc');
+  const saveArticle = document.getElementById('save-article')
+
+  articleTitle.value = '';
+  articleDescription.value = ''
+
+  saveArticle.addEventListener('click', addArticleHandler)
+  
+  // saveArticle.addEventListener('click', (e) => {
+    // const title = articleTitle.value;
+    // const desc = articleDescription.value;
+    //
+    // if(!checkEmptyFields(title, desc)) {
+    //   const errorContainer = document.getElementById('modal-article-error');
+    //   errorContainer.innerText = 'Empty fields';
+    //   return
+    // }
+    //
+    // const projects = getAllProjects();
+    // if (!projects.length) return;
+    //
+    // const articles = projects[checkedProjectIndex].articles;
+    //
+    // console.log('articles', articles)
+    //
+    // let currentId;
+    //
+    // if (!articles.length) {
+    //   projects[checkedProjectIndex].articles.push({
+    //     id: 1,
+    //     title: title,
+    //     description: desc,
+    //     parentProject: checkedProject.id
+    //   })
+    //  
+    //   console.log('projects if articles 0', projects)
+    //
+    //   // localStorage.setItem('db_projects', JSON.stringify(projects));
+    //
+    // } else {
+    //   const sortedArticles = articles.sort((a,b) => a.id - b.id)
+    //   console.log('sortedArticles', sortedArticles)
+    //  
+    //   currentId = sortedArticles.at(-1).id;
+    //  
+    //   projects[checkedProjectIndex].articles.push({
+    //     id: ++currentId,
+    //     title: title,
+    //     description: desc,
+    //     parentProject: checkedProject.id
+    //   })
+    //
+    //   console.log('projects articles if not 0', projects)
+    //
+    //  
+    // }
+    // localStorage.setItem('db_projects', JSON.stringify(projects));
+    // renderProjectsData();
+    // closeModal('exampleModalArticle');
+
+
+    // console.log(checkedProject)
+    // console.log('add article')
+    //
+  // })
+
+  addArticle.removeEventListener('click', addNewArticle)
+ 
+}
+
+function addArticleHandler() {
+  const articleTitle = document.getElementById('article-title');
+  const articleDescription = document.getElementById('article-desc');
+  const saveArticle = document.getElementById('save-article')
+  const title = articleTitle.value;
+  const desc = articleDescription.value;
+
+  if(!checkEmptyFields(title, desc)) {
+    const errorContainer = document.getElementById('modal-article-error');
+    errorContainer.innerText = 'Empty fields';
+    return
+  }
+
+  const projects = getAllProjects();
+  if (!projects.length) return;
+
+  const articles = projects[checkedProjectIndex].articles;
+
+  console.log('articles', articles)
+
+  let currentId;
+
+  if (!articles.length) {
+    projects[checkedProjectIndex].articles.push({
+      id: 1,
+      title: title,
+      description: desc,
+      parentProject: checkedProject.id
+    })
+
+    console.log('projects if articles 0', projects)
+
+    // localStorage.setItem('db_projects', JSON.stringify(projects));
+
+  } else {
+    const sortedArticles = articles.sort((a,b) => a.id - b.id)
+    console.log('sortedArticles', sortedArticles)
+
+    currentId = sortedArticles.at(-1).id;
+
+    projects[checkedProjectIndex].articles.push({
+      id: ++currentId,
+      title: title,
+      description: desc,
+      parentProject: checkedProject.id
+    })
+
+    console.log('projects articles if not 0', projects)
+
+
+  }
+  localStorage.setItem('db_projects', JSON.stringify(projects));
+  renderProjectsData();
+  closeModal('exampleModalArticle');
+  saveArticle.removeEventListener('click', addArticleHandler)
 }
