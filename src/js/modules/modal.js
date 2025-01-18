@@ -11,7 +11,6 @@ export const modalTitle = document.getElementById('modal-title');
 const dialogElement = document.getElementById('exampleModal');
 
 export const addArticle = document.getElementById('add-article');
-
 dialogElement.addEventListener('hide.bs.modal', (e) => {
   titleElement.value = '';
   descriptionElement.value = '';
@@ -20,19 +19,20 @@ dialogElement.addEventListener('hide.bs.modal', (e) => {
 })
 
 dialogElement.addEventListener('show.bs.modal', (e) => {
-   
   modalTitle.innerText = 'Add new project';
   addArticle.disabled = true;
   console.log('modal here')
 })
 
 export function addNewProject() {
+  errorMessage.innerText = '';
   const saveProjectButton = document.getElementById('save-project');
   saveProjectButton.classList.remove('hidden')
   console.log(saveProjectButton)
   const saveChangesButton = document.getElementById('save-changes');
   saveChangesButton.classList.add('hidden')
   saveProjectButton.addEventListener('click', () => {
+      
     console.log('save project')
       console.log('Handler executed')
       const title = titleElement.value;
@@ -49,24 +49,28 @@ export function addNewProject() {
         projects.push({ id: 1, title, description, author, status, articles: [] });
         localStorage.setItem('db_projects', JSON.stringify(projects));
       } else {
-        currentId = projects.at(-1).id;
-        projects.push({ id: ++currentId, title, description, author, status, articles: []  });
-        localStorage.setItem('db_projects', JSON.stringify(projects));
+        
+        const sortedProjects = projects.sort((a,b) => a.id - b.id)
+        console.log(sortedProjects)
+        currentId = sortedProjects.at(-1).id;
+        sortedProjects.push({ id: ++currentId, title, description, author, status, articles: []  });
+        localStorage.setItem('db_projects', JSON.stringify(sortedProjects));
       }
-
+      
       renderProjectsData();
 
       titleElement.value = '';
       descriptionElement.value = '';
-      closeModal();
+      closeModal('exampleModal');
   }
   )
-
+  
+  
   
 }
 
-export function closeModal() {
-  const dialogElement = document.getElementById('exampleModal');
+export function closeModal(name) {
+  const dialogElement = document.getElementById(name);
   const modal = bootstrap.Modal.getOrCreateInstance(dialogElement);
   modal.hide();
 }

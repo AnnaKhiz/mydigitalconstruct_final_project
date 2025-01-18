@@ -6,19 +6,58 @@ import {
   authorElement,
   statusElement,
   checkEmptyFields,
-  errorMessage, 
-  modalTitle, 
+  errorMessage,
+  modalTitle,
   closeModal,
-  addArticle
+  addArticle, projectQuantity
+
 } from "./modal";
 
 export const projectsList = document.getElementById('projects-list');
 const noProjectsNotify = document.getElementById('no-projects-notify');
 const tableElement = document.getElementById('projects-table');
+const projectsQuantity = document.getElementById('projects-quantity');
+const articlesQuantity = document.getElementById('articles-quantity');
+const articlesContainer = document.getElementById('articles-container');
+const articlesList = document.getElementById('articles-list');
+const totalQuantity = document.getElementById('total-quantity');
 
 let checkedProject;
 let checkedProjectIndex;
 
+export function renderArticles(id) {
+  const projects = getAllProjects();
+  
+  if (!projects.length) return;
+  
+  const currentProject = projects.find(el => el.id === +id);
+  
+  if (!currentProject) return;
+
+  const projectsArticles = currentProject.articles;
+  
+  if (!projectsArticles.length) {
+    articlesList.innerHTML = '';
+    articlesList.insertAdjacentHTML('beforeend', `No articles in this project`)
+    return;
+  }
+
+  articlesList.innerHTML = '';
+  articlesList.insertAdjacentHTML('beforeend', `
+    ${projectsArticles.map(article => `
+        <div class="card card-item">
+          <img src="./assets/img/card.jpg" class="card-img-top" alt="image">
+          <div class="card-body">
+            <h5 class="card-title fs-5 text-truncate">${article.title}</h5>
+            <p class="card-text text-truncate mb-4 fs-6" >${article.description}</p>
+            <a href="#" class="d-block btn btn-primary btn-sm">Open</a>
+          </div>
+        </div>
+    `).join('')}
+  `)
+  
+  console.log('projectsArticles', projectsArticles)
+}
 export function renderProjectsData() {
   const projects = getAllProjects();
 
@@ -27,13 +66,17 @@ export function renderProjectsData() {
     noProjectsNotify.innerText = 'No projects yet';
     return
   }
+  
   tableElement.classList.remove('hidden');
   noProjectsNotify.innerText = '';
   projectsList.innerHTML = '';
-
+  
+  projectsQuantity.innerText = projects.length;
+  totalQuantity.innerText = projects.length + getAllArticlesQuantity();
+  
   projectsList.insertAdjacentHTML('beforeend', `
     ${projects.map(project =>
-    `<tr class="${+project.status === 100 ? 'opacity-50' : 'opacity-100'}" data-trow="${project.id}">
+    `<tr class="${+project.status === 100 ? 'opacity-50' : 'opacity-100'} table-row" data-tablerow="${project.id}" >
         <th scope="row">${project.id}</th>
         <td class="text-truncate">${project.title}</td>
         <td class="text-truncate" style="max-width: 150px;">${project.description}</td>
@@ -63,6 +106,21 @@ export function getAllProjects() {
   return projects.sort((a,b) => a.status - b.status)
 }
 
+export function getAllArticlesQuantity() {
+  
+  const projects = getAllProjects();
+  let articles = 0;
+  projects.forEach(project => {
+    // console.log(project.articles.length)
+    articles += project.articles.length ? project.articles.length : 0
+    // console.log(articles)
+  })
+  
+  // console.log(articles)
+  
+  return articles
+}
+
 export function removeProject() {
   projectsList.addEventListener('click', (event) => {
     event.preventDefault();
@@ -73,8 +131,16 @@ export function removeProject() {
     const index = projects.findIndex(project => +project.id === projectId);
     if (index === -1) return;
     projects.splice(index, 1);
+    projectsQuantity.innerText = projects.length;
+    
+    
     localStorage.setItem('db_projects', JSON.stringify(projects));
     renderProjectsData();
+
+    const articles = getAllArticlesQuantity()
+    articlesQuantity.innerText = articles
+
+    totalQuantity.innerText = projects.length + articles;
   })
 }
 
@@ -98,6 +164,7 @@ export function finishProject() {
 export function editProject(id) {
   // projectsList.addEventListener('click', (event) => {
   //   event.preventDefault();
+  errorMessage.innerText = '';
     const projectId = +id;
     const projects = getAllProjects();
     if (!projects.length) return;
@@ -120,14 +187,16 @@ export function editProject(id) {
     saveProjectButton.classList.add('hidden')
     saveChangesButton.classList.remove('hidden')
   
-    console.log(saveChangesButton)
-    
-    
+    // console.log(saveChangesButton)
     modalTitle.innerText = 'Edit project';
-    
     addArticle.disabled = false;
 
     saveChangesButton.addEventListener('click', () => {
+      console.log('titleElement.value', titleElement.value)
+      console.log('checkedProject ------', checkedProject)
+      
+      if (!checkEmptyFields(titleElement.value, descriptionElement.value, authorElement.value, statusElement.value)) return;
+      
       projects[checkedProjectIndex] = {
         id: checkedProject.id,
         title: titleElement.value,
@@ -136,64 +205,96 @@ export function editProject(id) {
         status: statusElement.value,
         articles: checkedProject.articles
       }
-
-      if (!checkEmptyFields(titleElement.value, descriptionElement.value, authorElement.value, statusElement.value)) return;
-
-      localStorage.setItem('db_projects', JSON.stringify(projects));
-      renderProjectsData();
-      closeModal();
-    })
-    
-  
-
-  addArticle.addEventListener('click', (e) => {
-    const articleTitle = document.getElementById('article-title');
-    const articleDescription = document.getElementById('article-desc');
-    const errorContainer = document.getElementById('modal-article-error');
-
-    const projects = getAllProjects();
-    if (!projects.length) return;
-
-    if(!checkEmptyFields(articleTitle.value, articleDescription.value)) {
-      errorContainer.innerText = 'Empty fields';
-      return
-    };
-    
-    const articles = projects[checkedProjectIndex].articles;
-
-    let currentId;
-    
-    if (!articles.length) {
-      projects[checkedProjectIndex].articles.push({
-        id: checkedProject.id + '_' + 1,
-        title: articleTitle.value,
-        description: articleDescription.value
-      })
-
-      localStorage.setItem('db_projects', JSON.stringify(projects));
       
-    } else {
-      currentId = articles.at(-1).id;
-      projects[checkedProjectIndex].articles.push({
-        id: checkedProject.id + '_' + (++currentId),
-        title: articleTitle.value,
-        description: articleDescription.value
-      })
-
       localStorage.setItem('db_projects', JSON.stringify(projects));
-    }
-    
-    
-    
-    
-    console.log(checkedProject)
-    console.log('add article')
-    // addNewArticle()
-  })
+      projectsQuantity.innerText = projects.length;
+      const articles = getAllArticlesQuantity();
+      articlesQuantity.innerText = articles;
+
+      totalQuantity.innerText = projects.length + articles;
+      renderProjectsData();
+      closeModal('exampleModal');
+    })
+  
+  addArticle.addEventListener('click', addNewArticle)
   
   
 }
 
-function editProjectHandler() {
+function addNewArticle() {
   
+  const articleTitle = document.getElementById('article-title');
+  const articleDescription = document.getElementById('article-desc');
+  const saveArticle = document.getElementById('save-article')
+
+  articleTitle.value = '';
+  articleDescription.value = ''
+
+  saveArticle.addEventListener('click', addArticleHandler)
+  addArticle.removeEventListener('click', addNewArticle)
+ 
+}
+
+function addArticleHandler() {
+  const articleTitle = document.getElementById('article-title');
+  const articleDescription = document.getElementById('article-desc');
+  const saveArticle = document.getElementById('save-article')
+  const title = articleTitle.value;
+  const desc = articleDescription.value;
+
+  if(!checkEmptyFields(title, desc)) {
+    const errorContainer = document.getElementById('modal-article-error');
+    errorContainer.innerText = 'Empty fields';
+    return
+  }
+
+  const projects = getAllProjects();
+  if (!projects.length) return;
+
+  const articles = projects[checkedProjectIndex].articles;
+
+  console.log('articles', articles)
+
+  let currentId;
+
+  if (!articles.length) {
+    projects[checkedProjectIndex].articles.push({
+      id: 1,
+      title: title,
+      description: desc,
+      parentProject: checkedProject.id
+    })
+
+    console.log('projects if articles 0', projects)
+    
+
+  } else {
+    const sortedArticles = articles.sort((a,b) => a.id - b.id)
+    console.log('sortedArticles', sortedArticles)
+
+    currentId = sortedArticles.at(-1).id;
+
+    projects[checkedProjectIndex].articles.push({
+      id: ++currentId,
+      title: title,
+      description: desc,
+      parentProject: checkedProject.id
+    })
+
+    console.log('projects articles if not 0', projects)
+
+
+  }
+  localStorage.setItem('db_projects', JSON.stringify(projects));
+
+  
+  renderArticles(checkedProjectIndex)
+  projectsQuantity.innerText = projects.length;
+  const articlesNumber = getAllArticlesQuantity();
+  articlesQuantity.innerText = articlesNumber;
+
+  totalQuantity.innerText = projects.length + articlesNumber;
+  renderProjectsData();
+  closeModal('exampleModalArticle');
+  saveArticle.removeEventListener('click', addArticleHandler)
 }
