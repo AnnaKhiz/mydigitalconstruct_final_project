@@ -15,6 +15,8 @@ import {
 
 export const projectsList = document.getElementById('projects-list');
 const noProjectsNotify = document.getElementById('no-projects-notify');
+const noArticlesNotify = document.getElementById('no-articles-notify');
+const articlesListContainer = document.getElementById('articles-list-container');
 const tableElement = document.getElementById('projects-table');
 const projectsQuantity = document.getElementById('projects-quantity');
 const articlesQuantity = document.getElementById('articles-quantity');
@@ -26,23 +28,36 @@ let checkedProject;
 let checkedProjectIndex;
 
 export function renderArticles(id) {
+  console.log('RENDED ARTICLES RUN')
   const projects = getAllProjects();
   
+  // console.log('render Articles Obg -----', projects)
   if (!projects.length) return;
+  console.log('RENDED ARTICLES RUN - projects.length > 0')
+  console.log('pram id', id)
+  const currentProject = projects.find(el => +el.id === +id);
   
-  const currentProject = projects.find(el => el.id === +id);
   
-  if (!currentProject) return;
-
+  
+  if (!currentProject) {
+    console.log('currentProject', currentProject)
+    return;
+  }
+  console.log('RENDED ARTICLES RUN - current project exist', currentProject)
+  
   const projectsArticles = currentProject.articles;
   
   if (!projectsArticles.length) {
-    articlesList.innerHTML = '';
-    articlesList.insertAdjacentHTML('beforeend', `No articles in this project`)
+    noArticlesNotify.innerText = 'No articles in this project';
+    articlesListContainer.classList.add('hidden');
     return;
   }
 
+  console.log('RENDED ARTICLES RUN - rendering articles', projectsArticles)
+  articlesListContainer.classList.remove('hidden');
+  noArticlesNotify.innerText = '';
   articlesList.innerHTML = '';
+  
   articlesList.insertAdjacentHTML('beforeend', `
     ${projectsArticles.map(article => `
         <div class="card card-item">
@@ -213,7 +228,9 @@ export function editProject(id) {
 
       totalQuantity.innerText = projects.length + articles;
       renderProjectsData();
+      renderArticles(checkedProjectIndex)
       closeModal('exampleModal');
+      
     })
   
   addArticle.addEventListener('click', addNewArticle)
@@ -231,6 +248,9 @@ function addNewArticle() {
   articleDescription.value = ''
 
   saveArticle.addEventListener('click', addArticleHandler)
+
+  // renderArticles(checkedProjectIndex)
+  
   addArticle.removeEventListener('click', addNewArticle)
  
 }
@@ -285,16 +305,18 @@ function addArticleHandler() {
 
 
   }
-  localStorage.setItem('db_projects', JSON.stringify(projects));
 
   
-  renderArticles(checkedProjectIndex)
+  localStorage.setItem('db_projects', JSON.stringify(projects));
+  renderArticles(projects[checkedProjectIndex].id)
+  
   projectsQuantity.innerText = projects.length;
   const articlesNumber = getAllArticlesQuantity();
   articlesQuantity.innerText = articlesNumber;
 
   totalQuantity.innerText = projects.length + articlesNumber;
   renderProjectsData();
+  
   closeModal('exampleModalArticle');
   saveArticle.removeEventListener('click', addArticleHandler)
 }
