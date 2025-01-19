@@ -65,7 +65,11 @@ export function renderArticles(id) {
           <div class="card-body">
             <h5 class="card-title fs-5 text-truncate">${article.title}</h5>
             <p class="card-text text-truncate mb-4 fs-6" >${article.description}</p>
-            <a href="#" class="d-block btn btn-primary btn-sm">Open</a>
+            <div class="d-flex align-items-center justify-content-between">
+              <a href="#" class="d-block btn btn-primary btn-sm" data-openart="${article.id}">Open</a>
+              <a href="#" class="d-block btn btn-warning btn-sm" data-editart="${article.id}">Edit</a>
+              <a href="#" class="d-block btn btn-danger btn-sm" data-delart="${article.id}">Delete</a>
+            </div>
           </div>
         </div>
     `).join('')}
