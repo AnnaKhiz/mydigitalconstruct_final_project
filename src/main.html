@@ -231,16 +231,6 @@
                       placeholder="Enter author name..."
                     >
                   </div>
-                  <div class="mb-3">
-                    <label for="exampleFormControlInput3" class="form-label">Status done (from 0 to 100%)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      class="form-control"
-                      id="exampleFormControlInput3"
-                    >
-                  </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                   <p id="modal-error" class="text-start text-danger fs-6"></p>
@@ -275,13 +265,10 @@
                 <th scope="col">Title</th>
                 <th scope="col">Description</th>
                 <th scope="col">Author</th>
-                <th scope="col" class="text-center">Status</th>
                 <th scope="col" class="text-end">Actions</th>
               </tr>
               </thead>
-              <tbody class="table-group-divider" id="projects-list">
-              
-              </tbody>
+              <tbody class="table-group-divider" id="projects-list"></tbody>
             </table>
           </div>
          
@@ -312,6 +299,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
+                <div class="mb-3">
+                  <label for="exampleFormControlInput3" class="form-label">Status done (from 0 to 100%)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    class="form-control"
+                    id="exampleFormControlInput3"
+                  >
+                </div>
                 <div class="mb-3">
                   <label for="article-title" class="form-label">Title</label>
                   <input
@@ -354,8 +351,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <div class="w-100 object-fit-cover mb-4">
+                <div class="w-100 object-fit-cover mb-2">
                   <img class="w-100" src="./assets/img/card.jpg" alt="card image">
+                </div>
+
+                <div class="progress mb-4" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                  <div id="article-progress-bar" class="progress-bar text-bg-warning"></div>
                 </div>
                 
                 <p class="w-100" id="open-description"></p>

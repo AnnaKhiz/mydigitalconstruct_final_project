@@ -4,7 +4,6 @@ import {
   titleElement,
   descriptionElement,
   authorElement,
-  statusElement,
   checkEmptyFields,
   errorMessage,
   modalTitle,
@@ -43,22 +42,13 @@ export function renderProjectsData() {
   
   projectsList.insertAdjacentHTML('beforeend', `
     ${projects.map(project =>
-    `<tr class="${+project.status === 100 ? 'opacity-50' : 'opacity-100'} table-row" data-tablerow="${project.id}" >
+    `<tr class="table-row" data-tablerow="${project.id}" >
         <th scope="row">${project.id}</th>
         <td class="text-truncate">${project.title}</td>
         <td class="text-truncate" style="max-width: 150px;">${project.description}</td>
         <td class="text-truncate">${project.author}</td>
-        <td>
-          <div class="progress" role="progressbar" aria-valuenow="${project.status}" aria-valuemin="0" aria-valuemax="100">
-            <div 
-            class="progress-bar bg-${+project.status === 100 ? 'success' : (+project.status <= 20 ? 'danger' : 'warning')} text-bg-warning" 
-            style="width: ${project.status}%"
-           >${project.status}%</div>
-          </div>
-        </td>
         <td class="text-end">
           <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-            <button type="button" class="btn btn-sm btn-primary " data-done="${project.id}">${+project.status === 100 ? 'Finished' : 'Finish'}</button>
             <button type="button" class="btn btn-sm btn-warning " data-edit="${project.id}">Edit</button>
             <button type="button" class="btn btn-sm btn-danger" data-delete="${project.id}" >Delete</button>
           </div>
@@ -69,8 +59,7 @@ export function renderProjectsData() {
 }
 
 export function getAllProjects() {
-  const projects =  localStorage.getItem('db_projects') ? JSON.parse(localStorage.getItem('db_projects')) : [];
-  return projects.sort((a,b) => a.status - b.status)
+  return localStorage.getItem('db_projects') ? JSON.parse(localStorage.getItem('db_projects')) : [];
 }
 
 export function removeProject() {
@@ -125,7 +114,6 @@ export function editProject(id) {
     titleElement.value = checkedProject.title;
     descriptionElement.value = checkedProject.description;
     authorElement.value = checkedProject.author;
-    statusElement.value = checkedProject.status;
 
     openModal('exampleModal');
     const saveChangesButton = document.getElementById('save-changes');
@@ -138,14 +126,13 @@ export function editProject(id) {
 
     saveChangesButton.addEventListener('click', () => {
       
-      if (!checkEmptyFields(titleElement.value, descriptionElement.value, authorElement.value, statusElement.value)) return;
+      if (!checkEmptyFields(titleElement.value, descriptionElement.value, authorElement.value)) return;
       
       projects[checkedProjectIndex] = {
         id: checkedProject.id,
         title: titleElement.value,
         description: descriptionElement.value,
         author: authorElement.value,
-        status: statusElement.value,
         articles: checkedProject.articles
       }
       

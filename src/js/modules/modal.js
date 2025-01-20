@@ -5,7 +5,7 @@ const closeModalDialog = document.getElementById('close-modal');
 export const titleElement = document.getElementById('exampleFormControlInput1');
 export const descriptionElement = document.getElementById('exampleFormControlTextarea1');
 export const authorElement = document.getElementById('exampleFormControlInput2');
-export const statusElement = document.getElementById('exampleFormControlInput3');
+
 export const errorMessage = document.getElementById('modal-error');
 export const modalTitle = document.getElementById('modal-title');
 const dialogElement = document.getElementById('exampleModal');
@@ -15,7 +15,6 @@ dialogElement.addEventListener('hide.bs.modal', (e) => {
   titleElement.value = '';
   descriptionElement.value = '';
   authorElement.value = '';
-  statusElement.value = '';
 })
 
 dialogElement.addEventListener('show.bs.modal', (e) => {
@@ -36,22 +35,22 @@ export function addNewProject() {
   const title = titleElement.value;
   const description = descriptionElement.value;
   const author = authorElement.value;
-  const status = statusElement.value;
+  
 
-  if(!checkEmptyFields(title, description, author, status)) return;
+  if(!checkEmptyFields(title, description, author)) return;
 
   const projects = getAllProjects();
 
   let currentId;
   if (!projects.length) {
-    projects.push({ id: 1, title, description, author, status, articles: [] });
+    projects.push({ id: 1, title, description, author, articles: [] });
     localStorage.setItem('db_projects', JSON.stringify(projects));
   } else {
     
     const sortedProjects = projects.sort((a,b) => a.id - b.id)
     console.log(sortedProjects)
     currentId = sortedProjects.at(-1).id;
-    sortedProjects.push({ id: ++currentId, title, description, author, status, articles: []  });
+    sortedProjects.push({ id: ++currentId, title, description, author, articles: []  });
     localStorage.setItem('db_projects', JSON.stringify(sortedProjects));
   }
       

@@ -10,6 +10,7 @@ const articlesList = document.getElementById('articles-list');
 const projectsQuantity = document.getElementById('projects-quantity');
 const articlesQuantity = document.getElementById('articles-quantity');
 const totalQuantity = document.getElementById('total-quantity');
+const statusElement = document.getElementById('exampleFormControlInput3');
 export function openArticle(id) {
   const projects = getAllProjects();
 
@@ -17,18 +18,25 @@ export function openArticle(id) {
   const currentRow = localStorage.getItem('project')
 
   const currentProject = projects.find(el => el.id === +currentRow);
-  console.log(currentProject)
 
   if (!currentProject) return;
 
   const selectedArticle = currentProject.articles.find(el => el.id === +id);
-
-  console.log(selectedArticle)
-
+  setProgressBackground(selectedArticle.status)
+  
+  const progressBarEl = document.getElementById('article-progress-bar')
+ 
+  progressBarEl.parentElement.setAttribute('aria-valuenow', selectedArticle.status)
+  progressBarEl.style.width = `${selectedArticle.status}%`;
+  
+  console.dir(progressBarEl.children[0])
+  progressBarEl.innerText = `${selectedArticle.status}%`;
+ 
   document.getElementById('open-header').innerText = selectedArticle.title;
   document.getElementById('open-description').innerText = selectedArticle.description;
 
-  openModal('articleBody')
+  openModal('articleBody');
+  
 }
 
 
@@ -54,11 +62,21 @@ export function renderArticles(id) {
   noArticlesNotify.innerText = '';
   articlesList.innerHTML = '';
 
+  projectsArticles.sort((a,b) => a.status - b.status)
+  
   articlesList.insertAdjacentHTML('beforeend', `
     ${projectsArticles.map(article => `
         <div class="card card-item">
           <img src="./assets/img/card.jpg" class="card-img-top" alt="image">
           <div class="card-body">
+          
+          <div class="progress mb-4 h-25" role="progressbar" aria-valuenow="${article.status}" aria-valuemin="0" aria-valuemax="100">
+            <div 
+            class="progress-bar bg-${+article.status === 100 ? 'success' : (+article.status <= 20 ? 'danger' : 'warning')} text-bg-warning" 
+            style="width: ${article.status}%"
+           >${article.status}%</div>
+          </div>
+        
             <h5 class="card-title fs-5 text-truncate">${article.title}</h5>
             <p class="card-text text-truncate mb-4 fs-6" >${article.description}</p>
             <div class="d-flex align-items-center justify-content-between">
@@ -116,6 +134,7 @@ export function addNewArticle() {
 
   articleTitle.value = '';
   articleDescription.value = '';
+  statusElement.value = '';
 
   saveArticle.addEventListener('click', addArticleHandler);
   
@@ -128,10 +147,15 @@ function addArticleHandler() {
   const saveArticle = document.getElementById('save-article')
   const title = articleTitle.value;
   const desc = articleDescription.value;
+  const status = statusElement.value;
+  
+  if (status < 1 || status > 100) {
+    document.getElementById('modal-article-error').innerText = 'Incorrect status';
+    return;
+  }
 
   if(!checkEmptyFields(title, desc)) {
-    const errorContainer = document.getElementById('modal-article-error');
-    errorContainer.innerText = 'Empty fields';
+    document.getElementById('modal-article-error').innerText = 'Empty fields';
     return;
   }
 
@@ -144,8 +168,9 @@ function addArticleHandler() {
   if (!articles.length) {
     projects[checkedProjectIndex].articles.push({
       id: 1,
-      title: title,
+      title,
       description: desc,
+      status,
       parentProject: checkedProject.id
     })
   } else {
@@ -154,8 +179,9 @@ function addArticleHandler() {
 
     projects[checkedProjectIndex].articles.push({
       id: ++currentId,
-      title: title,
+      title,
       description: desc,
+      status,
       parentProject: checkedProject.id
     })
   }
@@ -174,4 +200,28 @@ function addArticleHandler() {
   closeModal('exampleModalArticle');
   
   saveArticle.removeEventListener('click', addArticleHandler);
+}
+
+// TECHNICAL
+
+function setProgressBackground(status) {
+  const progressBarEl = document.getElementById('article-progress-bar')
+  let color = '';
+  switch (true) {
+    case (status >= 50 && status < 100):
+      progressBarEl.classList.remove(`bg-danger`);
+      progressBarEl.classList.remove(`bg-success`);
+      progressBarEl.classList.add(`bg-warning`);
+      break
+    case (status > 0 && status < 50):
+      progressBarEl.classList.remove(`bg-warning`);
+      progressBarEl.classList.remove(`bg-success`);
+      progressBarEl.classList.add(`bg-danger`);
+      break
+    default:
+      progressBarEl.classList.remove(`bg-danger`);
+      progressBarEl.classList.remove(`bg-warning`);
+      progressBarEl.classList.add(`bg-success`);
+  }
+  return color;
 }
