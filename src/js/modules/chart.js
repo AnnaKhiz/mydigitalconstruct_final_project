@@ -22,6 +22,7 @@ const data = {
   }]
 };
 
+
 new Chart(ctx, {
   type: 'line',
   data: data,
@@ -64,32 +65,34 @@ new Chart(ctx, {
   }
 });
 
-new Chart(ctxD, {
-  type: 'doughnut',
-  data: {
-    labels: [
-      'Published',
-      'Drafts',
-      'Deleted'
-    ],
-    datasets: [{
-      label: 'Articles',
-      data: [300, 50, 100],
-      backgroundColor: [
-        'rgba(25,135,84,0.93)',
-        'rgb(255, 205, 86)',
-        'rgba(220,53,69,0.94)'
+
+export function createDoughnutChart(data) {
+  return new Chart(ctxD, {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Published',
+        'In progress',
+        'Started'
       ],
-      hoverOffset: 4
-    }],
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: {
-        // position: 'right'
-        display: false
-      }
+      datasets: [{
+        label: 'Articles',
+        data: data,
+        backgroundColor: [
+          'rgba(25,135,84,0.93)',
+          'rgb(255, 205, 86)',
+          'rgba(220,53,69,0.94)'
+        ],
+        hoverOffset: 4
+      }],
     },
-  },
-})
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+    },
+  })
+}

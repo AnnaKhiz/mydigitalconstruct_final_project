@@ -1,45 +1,63 @@
 import './chart.js';
-import {addNewProject, openModal, } from './modal';
-import {renderProjectsData, removeProject, finishProject, editProject, getAllProjects, getAllArticlesQuantity, renderArticles, projectsList} from "./projectsCRUD";
+import { addNewProject, openModal, } from './modal';
+import {openArticle, renderArticles, getAllArticlesQuantity, removeArticle, editArticle } from "./articlesCRUD";
+import { renderProjectsData, removeProject, finishProject, 
+  editProject, getAllProjects } from "./projectsCRUD";
+import {createDoughnutChart} from "./chart";
 
 const projectsQuantity = document.getElementById('projects-quantity');
 const projectsContainer = document.getElementById('projects-container');
 const totalQuantity = document.getElementById('total-quantity');
 const articlesQuantity = document.getElementById('articles-quantity');
+const articlesListContainer = document.getElementById('articles-list-container');
 
 document.addEventListener('DOMContentLoaded', () => {
   projectsQuantity.innerText = !getAllProjects().length ? '0' : getAllProjects().length;
-  articlesQuantity.innerText = !getAllArticlesQuantity() ? '0' : getAllArticlesQuantity();
-  totalQuantity.innerText = getAllProjects().length + getAllArticlesQuantity();
+  const { articles, published, inProgress, started } = getAllArticlesQuantity()
+  console.log('finished', published, articles)
+  
+  articlesQuantity.innerText = !articles ? '0' : articles;
+  totalQuantity.innerText = getAllProjects().length + articles;
+  
+  
+  createDoughnutChart([published, inProgress, started])
   
   projectsContainer.addEventListener('click', (e) => {
-    // e.preventDefault()
-    console.log(e.target.dataset)
+    
     if (e.target.dataset.hasOwnProperty('edit')) {
-      editProject(e.target.dataset.edit)
+      editProject(e.target.dataset.edit);
     }
-    // e.target.dataset.hasOwnProperty('callmodal')
+    
     if (e.target.dataset.hasOwnProperty('callmodal')) {
-      // console.log('i add window')
-      addNewProject()
+      
+      addNewProject();
     }
     
     const currentRow = e.target.closest('tr') ? e.target.closest('tr').dataset.tablerow : null
     
     if (!currentRow) return;
     
-    renderArticles(currentRow)
+    localStorage.setItem('project', currentRow)
     
-    console.log(currentRow)
+    if (!currentRow) return;
     
+    renderArticles(currentRow);
     
-      
+    articlesListContainer.addEventListener('click', (e) => {
+      if (e.target.dataset.hasOwnProperty('openart')) {
+        openArticle(e.target.dataset.openart);
+      }
+
+      if (e.target.dataset.hasOwnProperty('delart')) {
+        removeArticle(e.target.dataset.delart);
+      }
+
+      if (e.target.dataset.hasOwnProperty('editart')) {
+        editArticle(e.target.dataset.editart);
+      }
+    })
     
   })
-  
-  
-  
-  
   
   renderProjectsData()
   removeProject()
@@ -50,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     logOut();
   }
   
-  
 })
 
 function logOut() {
@@ -60,6 +77,4 @@ function logOut() {
       document.location.href = '/';
     }
   })
-
-  
 }
