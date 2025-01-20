@@ -102,6 +102,10 @@ export function finishProject() {
 }
 
 export function editProject(id) {
+  const addArticleButton = document.getElementById('add-article');
+  if (addArticleButton.classList.contains('hidden')) {
+    addArticleButton.classList.remove('hidden')
+  }
   errorMessage.innerText = '';
     const projectId = +id;
     const projects = getAllProjects();

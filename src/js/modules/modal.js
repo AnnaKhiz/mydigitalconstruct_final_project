@@ -24,6 +24,11 @@ dialogElement.addEventListener('show.bs.modal', (e) => {
 })
 
 export function addNewProject() {
+  const addArticleButton = document.getElementById('add-article');
+  if (addArticleButton.classList.contains('hidden')) {
+    addArticleButton.classList.remove('hidden')
+  }
+  
   errorMessage.innerText = '';
   const saveProjectButton = document.getElementById('save-project');
   saveProjectButton.classList.remove('hidden')

@@ -1,6 +1,6 @@
 import './chart.js';
 import { addNewProject, openModal, } from './modal';
-import {openArticle, renderArticles, getAllArticlesQuantity, removeArticle} from "./articlesCRUD";
+import {openArticle, renderArticles, getAllArticlesQuantity, removeArticle, editArticle } from "./articlesCRUD";
 import { renderProjectsData, removeProject, finishProject, 
   editProject, getAllProjects } from "./projectsCRUD";
 
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     if (e.target.dataset.hasOwnProperty('callmodal')) {
+      
       addNewProject();
     }
     
@@ -42,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (e.target.dataset.hasOwnProperty('delart')) {
         removeArticle(e.target.dataset.delart);
+      }
+
+      if (e.target.dataset.hasOwnProperty('editart')) {
+        editArticle(e.target.dataset.editart);
       }
     })
     

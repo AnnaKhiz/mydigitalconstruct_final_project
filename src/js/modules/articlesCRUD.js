@@ -1,5 +1,13 @@
-import {getAllProjects, renderProjectsData, checkedProjectIndex, checkedProject } from "./projectsCRUD";
-import {addArticle, checkEmptyFields, closeModal, openModal} from "./modal";
+import { getAllProjects, renderProjectsData, checkedProjectIndex, checkedProject } from "./projectsCRUD";
+import {
+  addArticle,
+  authorElement,
+  checkEmptyFields,
+  closeModal,
+  descriptionElement,
+  openModal,
+  titleElement
+} from "./modal";
 
 
 
@@ -134,10 +142,15 @@ export function removeArticle(id) {
 }
 
 export function addNewArticle() {
+  const saveArticle = document.getElementById('save-article');
+  saveArticle.classList.remove('hidden');
+  document.getElementById('save-edited-article').classList.add('hidden');
+  const dialogTitle = document.getElementById('exampleModaArticleLabel');
   const articleTitle = document.getElementById('article-title');
   const articleDescription = document.getElementById('article-desc');
-  const saveArticle = document.getElementById('save-article');
+  // const saveArticle = document.getElementById('save-article');
 
+  dialogTitle.innerText = 'Add new article';
   articleTitle.value = '';
   articleDescription.value = '';
   statusElement.value = '';
@@ -227,6 +240,73 @@ export function finishArticle(article) {
     closeModal('articleBody')
     
   })
+}
+
+export function editArticle(id) {
+  openModal('exampleModalArticle');
+  const saveEditedArticle = document.getElementById('save-edited-article');
+  saveEditedArticle.classList.remove('hidden');
+  document.getElementById('save-article').classList.add('hidden');
+  const dialogTitle = document.getElementById('exampleModaArticleLabel');
+  const articleStatus = document.getElementById('exampleFormControlInput3');
+  const articleTitle = document.getElementById('article-title');
+  const articleDescription = document.getElementById('article-desc');
+  
+  const projects = getAllProjects();
+  const currentRow = localStorage.getItem('project');
+  // const currentProject = projects.find(el => el.id === +currentRow);
+
+  const currentProjectIndex = projects.findIndex(el => el.id === +currentRow);
+  
+  const articles = projects[currentProjectIndex].articles
+  const currentArticleIndex = articles.findIndex(el => el.id === +id)
+  
+  const currentArticle = articles.find(el => el.id === +id)
+  
+  console.log(currentArticle)
+
+  dialogTitle.innerText = 'Edit article';
+  
+  const addArticleButton = document.getElementById('add-article');
+  if (!addArticleButton.classList.contains('hidden')) {
+    addArticleButton.classList.add('hidden')
+  }
+  
+  articleStatus.value = currentArticle.status;
+  articleTitle.value = currentArticle.title;
+  articleDescription.value = currentArticle.description;
+
+  saveEditedArticle.addEventListener('click', () => {
+    
+    if (articleStatus.value < 1 || articleStatus.value > 100) {
+      document.getElementById('modal-article-error').innerText = 'Incorrect status';
+      return;
+    }
+    if (!checkEmptyFields(articleStatus.value, articleTitle.value, articleTitle.value)) {
+      document.getElementById('modal-article-error').innerText = 'Empty fields'
+      return;
+    }
+    document.getElementById('modal-article-error').innerText = ''
+    
+    const updatedArticle = {
+      ...currentArticle,
+      status: articleStatus.value,
+      title: articleTitle.value,
+      description: articleDescription.value
+    }
+
+    projects[currentProjectIndex].articles[currentArticleIndex] = updatedArticle;
+
+    localStorage.setItem('db_projects', JSON.stringify(projects));
+    
+    closeModal('exampleModalArticle')
+    renderArticles(projects[currentProjectIndex].id)
+    
+    console.log(updatedArticle)
+    
+    
+  })
+  
 }
 
 // TECHNICAL
