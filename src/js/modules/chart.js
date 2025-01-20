@@ -9,61 +9,74 @@ const gradient = ctx.createLinearGradient(0, 0, 0, 400);
 gradient.addColorStop(0, 'rgba(15,18,59,0.5)');
 gradient.addColorStop(1, 'rgba(0,117,255,0.74)');
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const data = {
-  labels: labels,
-  datasets: [{
-    label: 'Month articles statistic',
-    data: [65, 59, 80, 81, 56, 55, 40, 5, 10, 25, 15, 80],
-    fill: true,
-    borderColor: '#0075FF',
-    backgroundColor: gradient,
-    tension: 0.1
-  }]
-};
+// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+// const data = {
+//   labels: labels,
+//   datasets: [{
+//     label: 'Projects & Articles statistics',
+//     data: [65, 59, 80, 81, 56, 55, 40, 5, 10, 25, 15, 80],
+//     fill: true,
+//     borderColor: '#0075FF',
+//     backgroundColor: gradient,
+//     tension: 0.1
+//   }]
+// };
 
-
-new Chart(ctx, {
-  type: 'line',
-  data: data,
-  options: {
-    responsive: true,
-    scales: {
-      y: {
-        max: 100,
-        min: 0,
-        grid: {
-          color: '#1A1F37'
-        },
-        ticks: {
-          stepSize: 10,
-          color: '#c7c7c7'
-        },
-        border: {
-          color: '#c7c7c7'
-        },
+export function createLinear(projects, articles) {
+  return new Chart(ctx, {
+    type: 'line',
+    data:
+      {
+        labels: projects,
+        datasets: [{
+          label: 'Projects & Articles statistics',
+          data: articles,
+          fill: true,
+          borderColor: '#0075FF',
+          backgroundColor: gradient,
+          tension: 0.1
+        }]
       },
-      x: {
-        border: {
-          color: '#c7c7c7'
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          max: 100,
+          min: 0,
+          grid: {
+            color: '#1A1F37'
+          },
+          ticks: {
+            stepSize: 10,
+            color: '#c7c7c7'
+          },
+          border: {
+            color: '#c7c7c7'
+          },
         },
-        grid: {
-          color: '#1A1F37'
-        },
-        ticks: {
-          color: '#c7c7c7'
-        },
-      }
-    },
-    plugins: {
-      legend: {
-        labels: {
-          color: '#c7c7c7'
-        },
+        x: {
+          border: {
+            color: '#c7c7c7'
+          },
+          grid: {
+            color: '#1A1F37'
+          },
+          ticks: {
+            color: '#c7c7c7'
+          },
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: '#c7c7c7'
+          },
+        }
       }
     }
-  }
-});
+  });
+}
+
 
 
 export function createDoughnutChart(data) {
