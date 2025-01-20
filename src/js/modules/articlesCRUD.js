@@ -36,7 +36,7 @@ export function openArticle(id) {
   document.getElementById('open-description').innerText = selectedArticle.description;
 
   openModal('articleBody');
-  
+  finishArticle(selectedArticle)
 }
 
 
@@ -66,11 +66,17 @@ export function renderArticles(id) {
   
   articlesList.insertAdjacentHTML('beforeend', `
     ${projectsArticles.map(article => `
-        <div class="card card-item">
+        <div class="card card-item opacity-${+article.status === 100 ? '50' : '100'}">
           <img src="./assets/img/card.jpg" class="card-img-top" alt="image">
           <div class="card-body">
           
-          <div class="progress mb-4 h-25" role="progressbar" aria-valuenow="${article.status}" aria-valuemin="0" aria-valuemax="100">
+          <div 
+            class="progress mb-4 h-25" 
+            role="progressbar" 
+            aria-valuenow="${article.status}" 
+            aria-valuemin="0" 
+            aria-valuemax="100"
+          >
             <div 
             class="progress-bar bg-${+article.status === 100 ? 'success' : (+article.status <= 20 ? 'danger' : 'warning')} text-bg-warning" 
             style="width: ${article.status}%"
@@ -202,6 +208,27 @@ function addArticleHandler() {
   saveArticle.removeEventListener('click', addArticleHandler);
 }
 
+export function finishArticle(article) {
+  const finishButton = document.getElementById('finish-article');
+  
+  finishButton.addEventListener('click', (e) => {
+    const projects = getAllProjects();
+    
+    const projectIndex = projects.findIndex(el => el.id === article.parentProject);
+    if (projectIndex === -1) return;
+
+    const articleIndex = projects[projectIndex].articles.findIndex(el => el.id === article.id);
+    if (articleIndex === -1) return;
+    
+    projects[projectIndex].articles[articleIndex].status = '100';
+    
+    localStorage.setItem('db_projects', JSON.stringify(projects));
+    renderArticles(article.parentProject)
+    closeModal('articleBody')
+    
+  })
+}
+
 // TECHNICAL
 
 function setProgressBackground(status) {
@@ -225,3 +252,4 @@ function setProgressBackground(status) {
   }
   return color;
 }
+
