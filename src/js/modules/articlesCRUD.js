@@ -7,8 +7,11 @@ const noArticlesNotify = document.getElementById('no-articles-notify');
 const articlesListContainer = document.getElementById('articles-list-container');
 const articlesContainer = document.getElementById('articles-container');
 const articlesList = document.getElementById('articles-list');
+const projectsQuantity = document.getElementById('projects-quantity');
+const articlesQuantity = document.getElementById('articles-quantity');
+const totalQuantity = document.getElementById('total-quantity');
 export function openArticle(id) {
-  const projects = getAllProjects()
+  const projects = getAllProjects();
 
   if (!projects.length) return;
   const currentRow = localStorage.getItem('project')
@@ -80,11 +83,36 @@ export function getAllArticlesQuantity() {
   return articles;
 }
 
-export function addNewArticle() {
+export function removeArticle(id) {
+  const projects = getAllProjects();
 
+  if (!projects.length) return;
+  const currentRow = localStorage.getItem('project');
+
+  const currentProjectIndex = projects.findIndex(el => el.id === +currentRow);
+  if (currentProjectIndex === -1) return;
+
+  const index = projects[currentProjectIndex].articles.findIndex(el => el.id === +id);
+  
+  if(index === -1) return;
+
+  projects[currentProjectIndex].articles.splice(index, 1);
+  
+  localStorage.setItem('db_projects', JSON.stringify(projects));
+  
+  renderArticles(projects[currentProjectIndex].id)
+
+  const articles = getAllArticlesQuantity();
+  articlesQuantity.innerText = articles;
+
+  totalQuantity.innerText = projects.length + articles;
+  
+}
+
+export function addNewArticle() {
   const articleTitle = document.getElementById('article-title');
   const articleDescription = document.getElementById('article-desc');
-  const saveArticle = document.getElementById('save-article')
+  const saveArticle = document.getElementById('save-article');
 
   articleTitle.value = '';
   articleDescription.value = '';

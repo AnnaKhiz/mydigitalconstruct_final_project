@@ -28,45 +28,39 @@ export function addNewProject() {
   errorMessage.innerText = '';
   const saveProjectButton = document.getElementById('save-project');
   saveProjectButton.classList.remove('hidden')
-  console.log(saveProjectButton)
   const saveChangesButton = document.getElementById('save-changes');
   saveChangesButton.classList.add('hidden')
   saveProjectButton.addEventListener('click', () => {
       
-    console.log('save project')
-      console.log('Handler executed')
-      const title = titleElement.value;
-      const description = descriptionElement.value;
-      const author = authorElement.value;
-      const status = statusElement.value;
+    
+  const title = titleElement.value;
+  const description = descriptionElement.value;
+  const author = authorElement.value;
+  const status = statusElement.value;
 
-      if(!checkEmptyFields(title, description, author, status)) return;
+  if(!checkEmptyFields(title, description, author, status)) return;
 
-      const projects = getAllProjects();
+  const projects = getAllProjects();
 
-      let currentId;
-      if (!projects.length) {
-        projects.push({ id: 1, title, description, author, status, articles: [] });
-        localStorage.setItem('db_projects', JSON.stringify(projects));
-      } else {
-        
-        const sortedProjects = projects.sort((a,b) => a.id - b.id)
-        console.log(sortedProjects)
-        currentId = sortedProjects.at(-1).id;
-        sortedProjects.push({ id: ++currentId, title, description, author, status, articles: []  });
-        localStorage.setItem('db_projects', JSON.stringify(sortedProjects));
-      }
-      
-      renderProjectsData();
-
-      titleElement.value = '';
-      descriptionElement.value = '';
-      closeModal('exampleModal');
+  let currentId;
+  if (!projects.length) {
+    projects.push({ id: 1, title, description, author, status, articles: [] });
+    localStorage.setItem('db_projects', JSON.stringify(projects));
+  } else {
+    
+    const sortedProjects = projects.sort((a,b) => a.id - b.id)
+    console.log(sortedProjects)
+    currentId = sortedProjects.at(-1).id;
+    sortedProjects.push({ id: ++currentId, title, description, author, status, articles: []  });
+    localStorage.setItem('db_projects', JSON.stringify(sortedProjects));
   }
-  )
-  
-  
-  
+      
+  renderProjectsData();
+
+  titleElement.value = '';
+  descriptionElement.value = '';
+  closeModal('exampleModal');
+  })
 }
 
 export function closeModal(name) {

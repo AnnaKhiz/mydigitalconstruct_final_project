@@ -1,6 +1,6 @@
 import './chart.js';
 import { addNewProject, openModal, } from './modal';
-import { openArticle, renderArticles, getAllArticlesQuantity } from "./articlesCRUD";
+import {openArticle, renderArticles, getAllArticlesQuantity, removeArticle} from "./articlesCRUD";
 import { renderProjectsData, removeProject, finishProject, 
   editProject, getAllProjects } from "./projectsCRUD";
 
@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const currentRow = e.target.closest('tr') ? e.target.closest('tr').dataset.tablerow : null
     
+    if (!currentRow) return;
+    
     localStorage.setItem('project', currentRow)
     
     if (!currentRow) return;
@@ -36,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     articlesListContainer.addEventListener('click', (e) => {
       if (e.target.dataset.hasOwnProperty('openart')) {
         openArticle(e.target.dataset.openart);
+      }
+
+      if (e.target.dataset.hasOwnProperty('delart')) {
+        removeArticle(e.target.dataset.delart);
       }
     })
     
