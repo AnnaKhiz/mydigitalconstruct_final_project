@@ -3,6 +3,7 @@ import { addNewProject, openModal, } from './modal';
 import {openArticle, renderArticles, getAllArticlesQuantity, removeArticle, editArticle } from "./articlesCRUD";
 import { renderProjectsData, removeProject, finishProject, 
   editProject, getAllProjects } from "./projectsCRUD";
+import {createDoughnutChart} from "./chart";
 
 const projectsQuantity = document.getElementById('projects-quantity');
 const projectsContainer = document.getElementById('projects-container');
@@ -12,8 +13,14 @@ const articlesListContainer = document.getElementById('articles-list-container')
 
 document.addEventListener('DOMContentLoaded', () => {
   projectsQuantity.innerText = !getAllProjects().length ? '0' : getAllProjects().length;
-  articlesQuantity.innerText = !getAllArticlesQuantity() ? '0' : getAllArticlesQuantity();
-  totalQuantity.innerText = getAllProjects().length + getAllArticlesQuantity();
+  const { articles, published, inProgress, started } = getAllArticlesQuantity()
+  console.log('finished', published, articles)
+  
+  articlesQuantity.innerText = !articles ? '0' : articles;
+  totalQuantity.innerText = getAllProjects().length + articles;
+  
+  
+  createDoughnutChart([published, inProgress, started])
   
   projectsContainer.addEventListener('click', (e) => {
     

@@ -86,7 +86,7 @@ export function renderArticles(id) {
             aria-valuemax="100"
           >
             <div 
-            class="progress-bar bg-${+article.status === 100 ? 'success' : (+article.status <= 20 ? 'danger' : 'warning')} text-bg-warning" 
+            class="progress-bar bg-${+article.status === 100 ? 'success' : (+article.status >= 50 && +article.status < 100 ? 'warning' : 'danger')} text-bg-warning" 
             style="width: ${article.status}%"
            >${article.status}%</div>
           </div>
@@ -114,11 +114,21 @@ export function getAllArticlesQuantity() {
 
   const projects = getAllProjects();
   let articles = 0;
+  let published = 0;
+  let inProgress = 0;
+  let started = 0;
   projects.forEach(project => {
-    articles += project.articles.length ? project.articles.length : 0
+    articles += project.articles.length ? project.articles.length : 0;
+
+    published += project.articles.length ? project.articles.filter(el => +el.status === 100).length : 0;
+
+    inProgress += project.articles.length ? project.articles.filter(el => +el.status >= 50 && +el.status < 100).length : 0;
+
+    started += project.articles.length ? project.articles.filter(el => +el.status > 0 && +el.status < 50).length : 0;
+  
   })
   
-  return articles;
+  return { articles, published, inProgress, started };
 }
 
 export function removeArticle(id) {
@@ -140,7 +150,7 @@ export function removeArticle(id) {
   
   renderArticles(projects[currentProjectIndex].id)
 
-  const articles = getAllArticlesQuantity();
+  const { articles } = getAllArticlesQuantity();
   articlesQuantity.innerText = articles;
 
   totalQuantity.innerText = projects.length + articles;
@@ -187,10 +197,10 @@ function addArticleHandler() {
   const projects = getAllProjects();
   if (!projects.length) return;
 
-  const articles = projects[checkedProjectIndex].articles;
+  const articlesList = projects[checkedProjectIndex].articles;
   let currentId;
 
-  if (!articles.length) {
+  if (!articlesList.length) {
     projects[checkedProjectIndex].articles.push({
       id: 1,
       title,
@@ -199,7 +209,7 @@ function addArticleHandler() {
       parentProject: checkedProject.id
     })
   } else {
-    const sortedArticles = articles.sort((a,b) => a.id - b.id);
+    const sortedArticles = articlesList.sort((a,b) => a.id - b.id);
     currentId = sortedArticles.at(-1).id;
 
     projects[checkedProjectIndex].articles.push({
@@ -216,10 +226,10 @@ function addArticleHandler() {
 
   document.getElementById('projects-quantity').innerText = `${projects.length}`;
   
-  const articlesNumber = getAllArticlesQuantity();
-  document.getElementById('articles-quantity').innerText = articlesNumber;
+  const { articles } = getAllArticlesQuantity();
+  document.getElementById('articles-quantity').innerText = articles;
 
-  document.getElementById('total-quantity').innerText = `${projects.length + articlesNumber}`;
+  document.getElementById('total-quantity').innerText = `${projects.length + articles}`;
   renderProjectsData();
 
   closeModal('exampleModalArticle');
@@ -338,4 +348,8 @@ function setProgressBackground(status) {
   }
   return color;
 }
+
+// export function getArticlesStatuses() {
+//   const projects = 
+// }
 

@@ -38,7 +38,8 @@ export function renderProjectsData() {
   projectsList.innerHTML = '';
   
   projectsQuantity.innerText = projects.length;
-  totalQuantity.innerText = projects.length + getAllArticlesQuantity();
+  const { articles } = getAllArticlesQuantity();
+  totalQuantity.innerText = projects.length + articles;
   
   projectsList.insertAdjacentHTML('beforeend', `
     ${projects.map(project =>
@@ -81,7 +82,7 @@ export function removeProject() {
     localStorage.setItem('db_projects', JSON.stringify(projects));
     renderProjectsData();
 
-    const articles = getAllArticlesQuantity();
+    const { articles } = getAllArticlesQuantity();
     articlesQuantity.innerText = articles;
 
     totalQuantity.innerText = projects.length + articles;
@@ -146,7 +147,7 @@ export function editProject(id) {
       
       localStorage.setItem('db_projects', JSON.stringify(projects));
       projectsQuantity.innerText = projects.length;
-      const articles = getAllArticlesQuantity();
+      const { articles } = getAllArticlesQuantity();
       articlesQuantity.innerText = articles;
 
       totalQuantity.innerText = projects.length + articles;
