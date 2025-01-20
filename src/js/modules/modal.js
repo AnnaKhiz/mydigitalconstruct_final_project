@@ -75,8 +75,9 @@ export function closeModal(name) {
   modal.hide();
 }
 
-export function openModal() {
-  const dialogElement = document.getElementById('exampleModal');
+export function openModal(name) {
+  const dialogElement = document.getElementById(name);
+  console.log(dialogElement)
   const modal = bootstrap.Modal.getOrCreateInstance(dialogElement);
   modal.show();
 }

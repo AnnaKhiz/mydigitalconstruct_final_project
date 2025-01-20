@@ -1,11 +1,14 @@
 import './chart.js';
-import {addNewProject, openModal, } from './modal';
-import {renderProjectsData, removeProject, finishProject, editProject, getAllProjects, getAllArticlesQuantity, renderArticles, projectsList} from "./projectsCRUD";
+import { addNewProject, openModal, } from './modal';
+import { openArticle, renderArticles, getAllArticlesQuantity } from "./articlesCRUD";
+import { renderProjectsData, removeProject, finishProject, 
+  editProject, getAllProjects } from "./projectsCRUD";
 
 const projectsQuantity = document.getElementById('projects-quantity');
 const projectsContainer = document.getElementById('projects-container');
 const totalQuantity = document.getElementById('total-quantity');
 const articlesQuantity = document.getElementById('articles-quantity');
+const articlesListContainer = document.getElementById('articles-list-container');
 
 document.addEventListener('DOMContentLoaded', () => {
   projectsQuantity.innerText = !getAllProjects().length ? '0' : getAllProjects().length;
@@ -13,33 +16,30 @@ document.addEventListener('DOMContentLoaded', () => {
   totalQuantity.innerText = getAllProjects().length + getAllArticlesQuantity();
   
   projectsContainer.addEventListener('click', (e) => {
-    // e.preventDefault()
-    console.log(e.target.dataset)
+    
     if (e.target.dataset.hasOwnProperty('edit')) {
-      editProject(e.target.dataset.edit)
+      editProject(e.target.dataset.edit);
     }
-    // e.target.dataset.hasOwnProperty('callmodal')
+    
     if (e.target.dataset.hasOwnProperty('callmodal')) {
-      // console.log('i add window')
-      addNewProject()
+      addNewProject();
     }
     
     const currentRow = e.target.closest('tr') ? e.target.closest('tr').dataset.tablerow : null
     
+    localStorage.setItem('project', currentRow)
+    
     if (!currentRow) return;
     
-    renderArticles(currentRow)
+    renderArticles(currentRow);
     
-    console.log(currentRow)
-    
-    
-      
+    articlesListContainer.addEventListener('click', (e) => {
+      if (e.target.dataset.hasOwnProperty('openart')) {
+        openArticle(e.target.dataset.openart);
+      }
+    })
     
   })
-  
-  
-  
-  
   
   renderProjectsData()
   removeProject()
@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     logOut();
   }
   
-  
 })
 
 function logOut() {
@@ -60,6 +59,4 @@ function logOut() {
       document.location.href = '/';
     }
   })
-
-  
 }
