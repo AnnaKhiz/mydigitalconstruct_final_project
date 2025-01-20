@@ -48,9 +48,13 @@ export function renderProjectsData() {
         <td class="text-truncate" style="max-width: 150px;">${project.description}</td>
         <td class="text-truncate">${project.author}</td>
         <td class="text-end">
-          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-            <button type="button" class="btn btn-sm btn-warning " data-edit="${project.id}">Edit</button>
-            <button type="button" class="btn btn-sm btn-danger" data-delete="${project.id}" >Delete</button>
+          <div class="d-flex align-items-center justify-content-end gap-2" >
+            <button type="button" class="btn btn-sm actions " >
+                <img src="../../assets/img/icons/edit.png" data-edit="${project.id}" alt="edit icon">
+            </button>
+            <button type="button" class="btn btn-sm actions"  >
+                <img src="../../assets/img/icons/delete.png" data-delete="${project.id}" alt="delete icon">
+            </button>
           </div>
         </td>
       </tr>

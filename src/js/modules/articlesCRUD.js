@@ -95,8 +95,14 @@ export function renderArticles(id) {
             <p class="card-text text-truncate mb-4 fs-6" >${article.description}</p>
             <div class="d-flex align-items-center justify-content-between">
               <a href="#" class="d-block btn btn-primary btn-sm" data-openart="${article.id}">Open</a>
-              <a href="#" class="d-block btn btn-warning btn-sm" data-editart="${article.id}">Edit</a>
-              <a href="#" class="d-block btn btn-danger btn-sm" data-delart="${article.id}">Delete</a>
+              <div class="d-flex align-items-center justify-content-end gap-2">
+                <a href="#" class="d-block btn btn-sm actions" >
+                  <img src="../../assets/img/icons/edit.png" data-editart="${article.id}" alt="edit icon">
+                </a>
+                <a href="#" class="d-block btn btn-sm actions" >
+                  <img src="../../assets/img/icons/delete.png" data-delart="${article.id}" alt="delete icon">
+                </a>
+            </div>
             </div>
           </div>
         </div>
