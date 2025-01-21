@@ -1,6 +1,6 @@
 import { getAllProjects, renderProjectsData, checkedProjectIndex, checkedProject } from "./projectsCRUD";
 import {
-  addArticle,
+  
   authorElement,
   checkEmptyFields,
   closeModal,
@@ -19,7 +19,7 @@ const articlesList = document.getElementById('articles-list');
 const projectsQuantity = document.getElementById('projects-quantity');
 const articlesQuantity = document.getElementById('articles-quantity');
 const totalQuantity = document.getElementById('total-quantity');
-const statusElement = document.getElementById('exampleFormControlInput3');
+const statusElement = document.getElementById('article-status');
 export function openArticle(id) {
   const projects = getAllProjects();
 
@@ -164,10 +164,11 @@ export function removeArticle(id) {
 }
 
 export function addNewArticle() {
+  const addArticle = document.getElementById('add-article');
   const saveArticle = document.getElementById('save-article');
   saveArticle.classList.remove('hidden');
   document.getElementById('save-edited-article').classList.add('hidden');
-  const dialogTitle = document.getElementById('exampleModaArticleLabel');
+  const dialogTitle = document.getElementById('modalArticleLabel');
   const articleTitle = document.getElementById('article-title');
   const articleDescription = document.getElementById('article-desc');
   // const saveArticle = document.getElementById('save-article');
@@ -245,7 +246,7 @@ function addArticleHandler() {
   updateDoughnut();
   updateLinear();
 
-  closeModal('exampleModalArticle');
+  closeModal('modalAddArticle');
   
   saveArticle.removeEventListener('click', addArticleHandler);
 }
@@ -279,12 +280,12 @@ export function finishArticle(article) {
 
 
 export function editArticle(id) {
-  openModal('exampleModalArticle');
+  openModal('modalAddArticle');
   const saveEditedArticle = document.getElementById('save-edited-article');
   saveEditedArticle.classList.remove('hidden');
   document.getElementById('save-article').classList.add('hidden');
-  const dialogTitle = document.getElementById('exampleModaArticleLabel');
-  const articleStatus = document.getElementById('exampleFormControlInput3');
+  const dialogTitle = document.getElementById('modalArticleLabel');
+  const articleStatus = document.getElementById('article-status');
   const articleTitle = document.getElementById('article-title');
   const articleDescription = document.getElementById('article-desc');
   
@@ -335,7 +336,7 @@ export function editArticle(id) {
 
     localStorage.setItem('db_projects', JSON.stringify(projects));
     
-    closeModal('exampleModalArticle')
+    closeModal('modalAddArticle')
     renderArticles(projects[currentProjectIndex].id)
     
     console.log(updatedArticle)

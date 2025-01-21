@@ -131,7 +131,7 @@ export function editProject(id) {
     descriptionElement.value = checkedProject.description;
     authorElement.value = checkedProject.author;
 
-    openModal('exampleModal');
+    openModal('modalProject');
     const saveChangesButton = document.getElementById('save-changes');
     const saveProjectButton = document.getElementById('save-project');
     saveProjectButton.classList.add('hidden');
@@ -161,7 +161,7 @@ export function editProject(id) {
       totalQuantity.innerText = projects.length + articles;
       renderProjectsData();
       renderArticles(checkedProjectIndex)
-      closeModal('exampleModal');
+      closeModal('modalProject');
     })
   
   addArticle.addEventListener('click', addNewArticle);

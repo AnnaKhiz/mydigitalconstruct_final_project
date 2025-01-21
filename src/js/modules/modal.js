@@ -3,13 +3,13 @@ import { renderProjectsData, getAllProjects } from "./projectsCRUD";
 import {updateDoughnut, updateLinear} from "./articlesCRUD";
 
 const closeModalDialog = document.getElementById('close-modal');
-export const titleElement = document.getElementById('exampleFormControlInput1');
-export const descriptionElement = document.getElementById('exampleFormControlTextarea1');
-export const authorElement = document.getElementById('exampleFormControlInput2');
+export const titleElement = document.getElementById('project-name');
+export const descriptionElement = document.getElementById('project-description');
+export const authorElement = document.getElementById('project-author');
 
 export const errorMessage = document.getElementById('modal-error');
 export const modalTitle = document.getElementById('modal-title');
-const dialogElement = document.getElementById('exampleModal');
+const dialogElement = document.getElementById('modalProject');
 
 export const addArticle = document.getElementById('add-article');
 dialogElement.addEventListener('hide.bs.modal', (e) => {
@@ -66,7 +66,7 @@ export function addNewProject() {
 
   titleElement.value = '';
   descriptionElement.value = '';
-  closeModal('exampleModal');
+  closeModal('modalProject');
   })
 }
 
