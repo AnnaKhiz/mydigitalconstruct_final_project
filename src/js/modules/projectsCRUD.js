@@ -216,4 +216,78 @@ export function editProject(id) {
   addArticle.addEventListener('click', addNewArticle);
 }
 
+export function filterProjects() {
+  console.log('i m filter prod')
+  
+  const titleElement = document.getElementById('filter-project-title');
+  const authorElement = document.getElementById('filter-project-author');
+  const articlesElement = document.getElementById('filter-articles');
+  const filterButton = document.getElementById('filter-button');
+
+
+  filterButton.addEventListener('click', (event) => {
+    const title = titleElement.value?.trim() || '';
+    const author = authorElement.value?.trim() || '';
+    const isHasArticles = articlesElement.checked;
+    
+    switch(true) {
+      case title && author && isHasArticles:
+        filterProjectsBy(['author', 'title', 'articles'], [author, title, isHasArticles])
+        break;
+      case title && isHasArticles:
+        filterProjectsBy(['title', 'articles'], [title, isHasArticles])
+        break;
+      case author && isHasArticles:
+        filterProjectsBy(['author', 'articles'], [author, isHasArticles])
+        break;
+      case !!title && !!author:
+        filterProjectsBy(['author', 'title'], [author, title])
+        break;
+      case !!title:
+        filterProjectsBy(['title'], [title])
+        break;
+      case !!author:
+        filterProjectsBy(['author'], [author])
+        break;
+      case isHasArticles:
+        filterProjectsBy(['articles'], [isHasArticles])
+        break;
+      
+      default:
+        filterProjectsBy([], [])
+    }
+  })
+
+  titleElement.value = '';
+  authorElement.value = '';
+  articlesElement.checked = false;
+}
+
+function filterProjectsBy(fields, value) {
+  if (!fields.length && !value.length) {
+    document.getElementById('modal-filter-error').innerText = 'No filter conditions!';
+    return;
+  }
+  
+  const projects = getAllProjects();
+  const fieldsQuantity = fields.length;
+  let filtered = [];
+  
+  projects.forEach(project => {
+    
+    for (let i = 0; i < fieldsQuantity; i++) {
+      const field = fields[i]
+      if (field === 'articles' && project[field].length !== 0) {
+        filtered.push(project)
+      }
+      
+      if (project[field].includes(value[i]) && !filtered.find(el => +el.id === +project.id)) {
+        filtered.push(project)
+      }
+  }
+  });
+  
+  renderProjectsData(filtered);
+  closeModal('filterModal');
+}
 
