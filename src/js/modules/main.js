@@ -8,8 +8,10 @@ import {
   editArticle,
   updateDoughnut, updateLinear
 } from "./articlesCRUD";
-import { renderProjectsData, removeProject, finishProject, 
-  editProject, getAllProjects, addNewProject } from "./projectsCRUD";
+import {
+  renderProjectsData, removeProject, finishProject,
+  editProject, getAllProjects, addNewProject, filterProjects
+} from "./projectsCRUD";
 
 
 const projectsQuantity = document.getElementById('projects-quantity');
@@ -30,6 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
   projectsContainer.addEventListener('click', (e) => {
     console.log(e.target.dataset)
+    
+    if(e.target.dataset.bsTarget === '#filterModal') {
+      filterProjects()
+    }
+    
     if (e.target.dataset.hasOwnProperty('sort')) {
       tableSort(e.target.dataset.sort)
     }
