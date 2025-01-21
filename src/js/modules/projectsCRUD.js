@@ -1,18 +1,16 @@
 import {
   openModal,
-  addNewProject,
   titleElement,
   descriptionElement,
   authorElement,
-  checkEmptyFields,
   errorMessage,
   modalTitle,
   closeModal,
   addArticle
 
 } from "./modal";
-
-import { renderArticles, getAllArticlesQuantity, addNewArticle } from "./articlesCRUD";
+import {checkEmptyFields} from "./main";
+import {renderArticles, getAllArticlesQuantity, addNewArticle, updateDoughnut, updateLinear} from "./articlesCRUD";
 import {createDoughnutChart, createLinear} from "./chart";
 
 export const projectsList = document.getElementById('projects-list');
@@ -25,8 +23,59 @@ const totalQuantity = document.getElementById('total-quantity');
 export let checkedProject;
 export let checkedProjectIndex;
 
-export function renderProjectsData() {
-  const projects = getAllProjects();
+export function addNewProject() {
+  const addArticleButton = document.getElementById('add-article');
+  if (addArticleButton.classList.contains('hidden')) {
+    addArticleButton.classList.remove('hidden')
+  }
+
+  errorMessage.innerText = '';
+  const saveProjectButton = document.getElementById('save-project');
+  saveProjectButton.classList.remove('hidden')
+  const saveChangesButton = document.getElementById('save-changes');
+  saveChangesButton.classList.add('hidden')
+  saveProjectButton.addEventListener('click', () => {
+
+
+    const title = titleElement.value;
+    const description = descriptionElement.value;
+    const author = authorElement.value;
+
+
+    if(!checkEmptyFields(title, description, author)) return;
+
+    const projects = getAllProjects();
+
+    let currentId;
+    if (!projects.length) {
+      projects.push({ id: 1, title, description, author, articles: [] });
+      localStorage.setItem('db_projects', JSON.stringify(projects));
+    } else {
+
+      const sortedProjects = projects.sort((a,b) => a.id - b.id)
+      console.log(sortedProjects)
+      currentId = sortedProjects.at(-1).id;
+      sortedProjects.push({ id: ++currentId, title, description, author, articles: []  });
+      localStorage.setItem('db_projects', JSON.stringify(sortedProjects));
+    }
+
+    renderProjectsData();
+    updateDoughnut();
+    updateLinear();
+
+    titleElement.value = '';
+    descriptionElement.value = '';
+    closeModal('modalProject');
+  })
+}
+export function renderProjectsData( items = []) {
+  let projects;
+  if (!items.length) {
+    projects = getAllProjects();
+  } else {
+    projects = items
+  }
+  
 
   if (!projects.length) {
     tableElement.classList.add('hidden');

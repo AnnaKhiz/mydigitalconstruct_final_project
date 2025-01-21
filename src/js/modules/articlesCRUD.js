@@ -1,15 +1,10 @@
 import { getAllProjects, renderProjectsData, checkedProjectIndex, checkedProject } from "./projectsCRUD";
 import {
-  
-  authorElement,
-  checkEmptyFields,
   closeModal,
-  descriptionElement,
   openModal,
-  titleElement
 } from "./modal";
 import {createDoughnutChart, createLinear} from "./chart";
-
+import {checkEmptyFields} from "./main";
 
 
 const noArticlesNotify = document.getElementById('no-articles-notify');
