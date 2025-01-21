@@ -1,30 +1,15 @@
 import Chart from 'chart.js/auto';
 
-
-
-
-
-
-
-
-// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-// const data = {
-//   labels: labels,
-//   datasets: [{
-//     label: 'Projects & Articles statistics',
-//     data: [65, 59, 80, 81, 56, 55, 40, 5, 10, 25, 15, 80],
-//     fill: true,
-//     borderColor: '#0075FF',
-//     backgroundColor: gradient,
-//     tension: 0.1
-//   }]
-// };
 let chartLinear;
 export function createLinear(projects, articles) {
   
   if (chartLinear) {
-    chartLinear.destroy()
+    chartLinear.data.labels = projects;
+    chartLinear.data.datasets[0].data = articles;
+    chartLinear.update();
+    return chartLinear
   }
+
   const canvas = document.getElementById('my-chart-linear');
   const ctx = canvas.getContext('2d');
 
@@ -32,27 +17,24 @@ export function createLinear(projects, articles) {
   gradient.addColorStop(0, 'rgba(15,18,59,0.5)');
   gradient.addColorStop(1, 'rgba(0,117,255,0.74)');
   
-  
-  
   chartLinear = new Chart(ctx, {
     type: 'line',
-    data:
-      {
-        labels: projects,
-        datasets: [{
-          label: 'Projects & Articles statistics',
-          data: articles,
-          fill: true,
-          borderColor: '#0075FF',
-          backgroundColor: gradient,
-          tension: 0.1
-        }]
-      },
+    data: {
+      labels: projects,
+      datasets: [{
+        label: 'Projects & Articles statistics',
+        data: articles,
+        fill: true,
+        borderColor: '#0075FF',
+        backgroundColor: gradient,
+        tension: 0.1
+      }]
+    },
     options: {
       responsive: true,
       scales: {
         y: {
-          max: 100,
+          max: 50,
           min: 0,
           grid: {
             color: '#1A1F37'
@@ -95,8 +77,6 @@ let chartDoughnut;
 export function createDoughnutChart(data) {
   
   if (chartDoughnut) {
-    console.log('diagram exist and will destroy')
-    // chartDoughnut.destroy()
     chartDoughnut.data.datasets[0].data = data;
     chartDoughnut.update();
     return chartDoughnut

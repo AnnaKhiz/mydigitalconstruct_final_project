@@ -1,5 +1,6 @@
 import * as bootstrap from 'bootstrap';
 import { renderProjectsData, getAllProjects } from "./projectsCRUD";
+import {updateDoughnut, updateLinear} from "./articlesCRUD";
 
 const closeModalDialog = document.getElementById('close-modal');
 export const titleElement = document.getElementById('exampleFormControlInput1');
@@ -60,6 +61,8 @@ export function addNewProject() {
   }
       
   renderProjectsData();
+  updateDoughnut();
+  updateLinear();
 
   titleElement.value = '';
   descriptionElement.value = '';

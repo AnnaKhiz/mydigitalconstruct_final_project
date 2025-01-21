@@ -8,7 +8,7 @@ import {
   openModal,
   titleElement
 } from "./modal";
-import { createDoughnutChart } from "./chart";
+import {createDoughnutChart, createLinear} from "./chart";
 
 
 
@@ -153,9 +153,10 @@ export function removeArticle(id) {
   
   renderArticles(projects[currentProjectIndex].id)
 
-  const { articles, published, inProgress, started } = getAllArticlesQuantity();
+  const { articles } = getAllArticlesQuantity();
 
-  createDoughnutChart([published, inProgress, started])
+  updateDoughnut()
+  updateLinear()
   articlesQuantity.innerText = articles;
 
   totalQuantity.innerText = projects.length + articles;
@@ -177,8 +178,12 @@ export function addNewArticle() {
   statusElement.value = '';
 
   saveArticle.addEventListener('click', addArticleHandler);
+  updateDoughnut()
+  updateLinear()
   
   addArticle.removeEventListener('click', addNewArticle);
+
+  
 }
 
 function addArticleHandler() {
@@ -231,12 +236,14 @@ function addArticleHandler() {
 
   document.getElementById('projects-quantity').innerText = `${projects.length}`;
   
-  const { articles, published, inProgress, started } = getAllArticlesQuantity();
-  createDoughnutChart([published, inProgress, started])
+  const { articles } = getAllArticlesQuantity();
+  
   document.getElementById('articles-quantity').innerText = articles;
 
   document.getElementById('total-quantity').innerText = `${projects.length + articles}`;
   renderProjectsData();
+  updateDoughnut();
+  updateLinear();
 
   closeModal('exampleModalArticle');
   
@@ -261,17 +268,15 @@ export function finishArticle(article) {
 
     
     renderArticles(article.parentProject)
-
-    const { published, inProgress, started } = getAllArticlesQuantity();
-    console.log('statistic', published, inProgress, started)
-    createDoughnutChart([published, inProgress, started])
-    
     closeModal('articleBody')
 
-    
+    updateDoughnut();
+    updateLinear();
     
   })
 }
+
+
 
 export function editArticle(id) {
   openModal('exampleModalArticle');
@@ -334,15 +339,35 @@ export function editArticle(id) {
     renderArticles(projects[currentProjectIndex].id)
     
     console.log(updatedArticle)
-
-    const { published, inProgress, started } = getAllArticlesQuantity();
-    console.log('statistic', published, inProgress, started)
-    createDoughnutChart([published, inProgress, started])
+    updateDoughnut()
+    updateLinear()
+    
   })
   
 }
 
 // TECHNICAL
+
+export function updateLinear() {
+  const projects = getAllProjects();
+  
+  const projectTitles = projects.map(project => {
+    const articles = project.articles.length ? project.articles : []
+    return {
+      key: project.title,
+      value: articles.length
+    }
+  })
+  
+  const projectsArgs = projectTitles.map(el => el.key);
+  const articlesArgs = projectTitles.map(el => el.value)
+  createLinear(projectsArgs, articlesArgs)
+}
+
+export function updateDoughnut() {
+  const { published, inProgress, started } = getAllArticlesQuantity();
+  createDoughnutChart([published, inProgress, started])
+}
 
 function setProgressBackground(status) {
   const progressBarEl = document.getElementById('article-progress-bar')
