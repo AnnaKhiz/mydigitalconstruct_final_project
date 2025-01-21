@@ -1,13 +1,11 @@
 import Chart from 'chart.js/auto';
 
-const canvas = document.getElementById('my-chart-linear');
-const canvasDoughnut = document.getElementById('my-chart-doughnut');
-const ctx = canvas.getContext('2d');
-const ctxD = canvasDoughnut.getContext('2d');
 
-const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-gradient.addColorStop(0, 'rgba(15,18,59,0.5)');
-gradient.addColorStop(1, 'rgba(0,117,255,0.74)');
+
+
+
+
+
 
 // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 // const data = {
@@ -21,9 +19,22 @@ gradient.addColorStop(1, 'rgba(0,117,255,0.74)');
 //     tension: 0.1
 //   }]
 // };
-
+let chartLinear;
 export function createLinear(projects, articles) {
-  return new Chart(ctx, {
+  
+  if (chartLinear) {
+    chartLinear.destroy()
+  }
+  const canvas = document.getElementById('my-chart-linear');
+  const ctx = canvas.getContext('2d');
+
+  const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+  gradient.addColorStop(0, 'rgba(15,18,59,0.5)');
+  gradient.addColorStop(1, 'rgba(0,117,255,0.74)');
+  
+  
+  
+  chartLinear = new Chart(ctx, {
     type: 'line',
     data:
       {
@@ -75,12 +86,32 @@ export function createLinear(projects, articles) {
       }
     }
   });
+  
+  return chartLinear;
 }
 
-
+let chartDoughnut;
 
 export function createDoughnutChart(data) {
-  return new Chart(ctxD, {
+  
+  if (chartDoughnut) {
+    console.log('diagram exist and will destroy')
+    // chartDoughnut.destroy()
+    chartDoughnut.data.datasets[0].data = data;
+    chartDoughnut.update();
+    return chartDoughnut
+  }
+
+  const canvasDoughnut = document.getElementById('my-chart-doughnut');
+
+  if (!canvasDoughnut) {
+    console.error('Canvas element with id "canvasDoughnut" not found.');
+    return;
+  }
+  console.log('create new chart')
+  const ctxD = canvasDoughnut.getContext('2d');
+  
+  chartDoughnut = new Chart(ctxD, {
     type: 'doughnut',
     data: {
       labels: [
@@ -108,4 +139,7 @@ export function createDoughnutChart(data) {
       },
     },
   })
+  
+  return chartDoughnut
+  
 }

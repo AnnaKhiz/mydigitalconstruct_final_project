@@ -8,6 +8,7 @@ import {
   openModal,
   titleElement
 } from "./modal";
+import { createDoughnutChart } from "./chart";
 
 
 
@@ -45,6 +46,8 @@ export function openArticle(id) {
 
   openModal('articleBody');
   finishArticle(selectedArticle)
+
+  
 }
 
 
@@ -150,7 +153,9 @@ export function removeArticle(id) {
   
   renderArticles(projects[currentProjectIndex].id)
 
-  const { articles } = getAllArticlesQuantity();
+  const { articles, published, inProgress, started } = getAllArticlesQuantity();
+
+  createDoughnutChart([published, inProgress, started])
   articlesQuantity.innerText = articles;
 
   totalQuantity.innerText = projects.length + articles;
@@ -226,7 +231,8 @@ function addArticleHandler() {
 
   document.getElementById('projects-quantity').innerText = `${projects.length}`;
   
-  const { articles } = getAllArticlesQuantity();
+  const { articles, published, inProgress, started } = getAllArticlesQuantity();
+  createDoughnutChart([published, inProgress, started])
   document.getElementById('articles-quantity').innerText = articles;
 
   document.getElementById('total-quantity').innerText = `${projects.length + articles}`;
@@ -252,8 +258,17 @@ export function finishArticle(article) {
     projects[projectIndex].articles[articleIndex].status = '100';
     
     localStorage.setItem('db_projects', JSON.stringify(projects));
+
+    
     renderArticles(article.parentProject)
+
+    const { published, inProgress, started } = getAllArticlesQuantity();
+    console.log('statistic', published, inProgress, started)
+    createDoughnutChart([published, inProgress, started])
+    
     closeModal('articleBody')
+
+    
     
   })
 }
@@ -319,8 +334,10 @@ export function editArticle(id) {
     renderArticles(projects[currentProjectIndex].id)
     
     console.log(updatedArticle)
-    
-    
+
+    const { published, inProgress, started } = getAllArticlesQuantity();
+    console.log('statistic', published, inProgress, started)
+    createDoughnutChart([published, inProgress, started])
   })
   
 }

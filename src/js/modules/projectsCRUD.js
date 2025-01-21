@@ -13,6 +13,7 @@ import {
 } from "./modal";
 
 import { renderArticles, getAllArticlesQuantity, addNewArticle } from "./articlesCRUD";
+import {createDoughnutChart, createLinear} from "./chart";
 
 export const projectsList = document.getElementById('projects-list');
 const noProjectsNotify = document.getElementById('no-projects-notify');
@@ -38,8 +39,12 @@ export function renderProjectsData() {
   projectsList.innerHTML = '';
   
   projectsQuantity.innerText = projects.length;
-  const { articles } = getAllArticlesQuantity();
+  const { articles, published, inProgress, started } = getAllArticlesQuantity();
   totalQuantity.innerText = projects.length + articles;
+
+  // createLinear(['project_1', 'project_2', 'project_3', 'project_4'], [15, 85, 24, 44])
+
+  createDoughnutChart([published, inProgress, started])
   
   projectsList.insertAdjacentHTML('beforeend', `
     ${projects.map(project =>
@@ -82,7 +87,9 @@ export function removeProject() {
     localStorage.setItem('db_projects', JSON.stringify(projects));
     renderProjectsData();
 
-    const { articles } = getAllArticlesQuantity();
+    const { articles, published, inProgress, started } = getAllArticlesQuantity();
+    createDoughnutChart([published, inProgress, started])
+    
     articlesQuantity.innerText = articles;
 
     totalQuantity.innerText = projects.length + articles;
@@ -147,7 +154,8 @@ export function editProject(id) {
       
       localStorage.setItem('db_projects', JSON.stringify(projects));
       projectsQuantity.innerText = projects.length;
-      const { articles } = getAllArticlesQuantity();
+      const { articles, published, inProgress, started } = getAllArticlesQuantity();
+      createDoughnutChart([published, inProgress, started])
       articlesQuantity.innerText = articles;
 
       totalQuantity.innerText = projects.length + articles;
