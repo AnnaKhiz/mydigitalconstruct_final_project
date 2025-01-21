@@ -1,9 +1,16 @@
 import './chart.js';
-import { addNewProject, openModal, } from './modal';
-import {openArticle, renderArticles, getAllArticlesQuantity, removeArticle, editArticle } from "./articlesCRUD";
+import {errorMessage} from './modal';
+import {
+  openArticle,
+  renderArticles,
+  getAllArticlesQuantity,
+  removeArticle,
+  editArticle,
+  updateDoughnut, updateLinear
+} from "./articlesCRUD";
 import { renderProjectsData, removeProject, finishProject, 
-  editProject, getAllProjects } from "./projectsCRUD";
-import {createDoughnutChart} from "./chart";
+  editProject, getAllProjects, addNewProject } from "./projectsCRUD";
+
 
 const projectsQuantity = document.getElementById('projects-quantity');
 const projectsContainer = document.getElementById('projects-container');
@@ -11,25 +18,27 @@ const totalQuantity = document.getElementById('total-quantity');
 const articlesQuantity = document.getElementById('articles-quantity');
 const articlesListContainer = document.getElementById('articles-list-container');
 
+
 document.addEventListener('DOMContentLoaded', () => {
   projectsQuantity.innerText = !getAllProjects().length ? '0' : getAllProjects().length;
-  const { articles, published, inProgress, started } = getAllArticlesQuantity()
-  console.log('finished', published, articles)
+  const { articles } = getAllArticlesQuantity()
   
   articlesQuantity.innerText = !articles ? '0' : articles;
   totalQuantity.innerText = getAllProjects().length + articles;
-  
-  
-  createDoughnutChart([published, inProgress, started])
+  updateDoughnut()
+  updateLinear()
   
   projectsContainer.addEventListener('click', (e) => {
+    console.log(e.target.dataset)
+    if (e.target.dataset.hasOwnProperty('sort')) {
+      tableSort(e.target.dataset.sort)
+    }
     
     if (e.target.dataset.hasOwnProperty('edit')) {
       editProject(e.target.dataset.edit);
     }
     
     if (e.target.dataset.hasOwnProperty('callmodal')) {
-      
       addNewProject();
     }
     
@@ -77,4 +86,36 @@ function logOut() {
       document.location.href = '/';
     }
   })
+}
+
+let sortOrder = {};
+function tableSort(value) {
+  if (!sortOrder[value]) {
+    sortOrder[value] = 'asc'
+  } else {
+    sortOrder[value] = sortOrder[value] === 'asc' ? 'desc' : 'asc';
+  }
+  
+  const projects = getAllProjects();
+  
+  if (value === 'id') {
+    projects.sort((a,b) =>
+      sortOrder[value] === 'asc' ? b[value] - a[value] : a[value] - b[value])
+  } else {
+    projects.sort((a,b) =>
+      sortOrder[value] === 'asc' ? a[value].localeCompare(b[value]) : b[value].localeCompare(a[value]))
+      
+  }
+  
+  renderProjectsData(projects)
+}
+
+export function checkEmptyFields(...fields) {
+  console.log('empty', fields.some(el => el.trim() === ''))
+  if (fields.some(el => el.trim() === '')) {
+    errorMessage.innerText = 'Empty fields!';
+    return;
+  }
+  errorMessage.innerText = '';
+  return true
 }

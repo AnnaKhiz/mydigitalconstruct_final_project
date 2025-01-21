@@ -1,14 +1,10 @@
 import { getAllProjects, renderProjectsData, checkedProjectIndex, checkedProject } from "./projectsCRUD";
 import {
-  addArticle,
-  authorElement,
-  checkEmptyFields,
   closeModal,
-  descriptionElement,
   openModal,
-  titleElement
 } from "./modal";
-
+import {createDoughnutChart, createLinear} from "./chart";
+import {checkEmptyFields} from "./main";
 
 
 const noArticlesNotify = document.getElementById('no-articles-notify');
@@ -18,7 +14,7 @@ const articlesList = document.getElementById('articles-list');
 const projectsQuantity = document.getElementById('projects-quantity');
 const articlesQuantity = document.getElementById('articles-quantity');
 const totalQuantity = document.getElementById('total-quantity');
-const statusElement = document.getElementById('exampleFormControlInput3');
+const statusElement = document.getElementById('article-status');
 export function openArticle(id) {
   const projects = getAllProjects();
 
@@ -45,6 +41,8 @@ export function openArticle(id) {
 
   openModal('articleBody');
   finishArticle(selectedArticle)
+
+  
 }
 
 
@@ -151,6 +149,9 @@ export function removeArticle(id) {
   renderArticles(projects[currentProjectIndex].id)
 
   const { articles } = getAllArticlesQuantity();
+
+  updateDoughnut()
+  updateLinear()
   articlesQuantity.innerText = articles;
 
   totalQuantity.innerText = projects.length + articles;
@@ -158,10 +159,11 @@ export function removeArticle(id) {
 }
 
 export function addNewArticle() {
+  const addArticle = document.getElementById('add-article');
   const saveArticle = document.getElementById('save-article');
   saveArticle.classList.remove('hidden');
   document.getElementById('save-edited-article').classList.add('hidden');
-  const dialogTitle = document.getElementById('exampleModaArticleLabel');
+  const dialogTitle = document.getElementById('modalArticleLabel');
   const articleTitle = document.getElementById('article-title');
   const articleDescription = document.getElementById('article-desc');
   // const saveArticle = document.getElementById('save-article');
@@ -172,8 +174,12 @@ export function addNewArticle() {
   statusElement.value = '';
 
   saveArticle.addEventListener('click', addArticleHandler);
+  updateDoughnut()
+  updateLinear()
   
   addArticle.removeEventListener('click', addNewArticle);
+
+  
 }
 
 function addArticleHandler() {
@@ -227,12 +233,15 @@ function addArticleHandler() {
   document.getElementById('projects-quantity').innerText = `${projects.length}`;
   
   const { articles } = getAllArticlesQuantity();
+  
   document.getElementById('articles-quantity').innerText = articles;
 
   document.getElementById('total-quantity').innerText = `${projects.length + articles}`;
   renderProjectsData();
+  updateDoughnut();
+  updateLinear();
 
-  closeModal('exampleModalArticle');
+  closeModal('modalAddArticle');
   
   saveArticle.removeEventListener('click', addArticleHandler);
 }
@@ -252,19 +261,26 @@ export function finishArticle(article) {
     projects[projectIndex].articles[articleIndex].status = '100';
     
     localStorage.setItem('db_projects', JSON.stringify(projects));
+
+    
     renderArticles(article.parentProject)
     closeModal('articleBody')
+
+    updateDoughnut();
+    updateLinear();
     
   })
 }
 
+
+
 export function editArticle(id) {
-  openModal('exampleModalArticle');
+  openModal('modalAddArticle');
   const saveEditedArticle = document.getElementById('save-edited-article');
   saveEditedArticle.classList.remove('hidden');
   document.getElementById('save-article').classList.add('hidden');
-  const dialogTitle = document.getElementById('exampleModaArticleLabel');
-  const articleStatus = document.getElementById('exampleFormControlInput3');
+  const dialogTitle = document.getElementById('modalArticleLabel');
+  const articleStatus = document.getElementById('article-status');
   const articleTitle = document.getElementById('article-title');
   const articleDescription = document.getElementById('article-desc');
   
@@ -315,17 +331,39 @@ export function editArticle(id) {
 
     localStorage.setItem('db_projects', JSON.stringify(projects));
     
-    closeModal('exampleModalArticle')
+    closeModal('modalAddArticle')
     renderArticles(projects[currentProjectIndex].id)
     
     console.log(updatedArticle)
-    
+    updateDoughnut()
+    updateLinear()
     
   })
   
 }
 
 // TECHNICAL
+
+export function updateLinear() {
+  const projects = getAllProjects();
+  
+  const projectTitles = projects.map(project => {
+    const articles = project.articles.length ? project.articles : []
+    return {
+      key: project.title,
+      value: articles.length
+    }
+  })
+  
+  const projectsArgs = projectTitles.map(el => el.key);
+  const articlesArgs = projectTitles.map(el => el.value)
+  createLinear(projectsArgs, articlesArgs)
+}
+
+export function updateDoughnut() {
+  const { published, inProgress, started } = getAllArticlesQuantity();
+  createDoughnutChart([published, inProgress, started])
+}
 
 function setProgressBackground(status) {
   const progressBarEl = document.getElementById('article-progress-bar')

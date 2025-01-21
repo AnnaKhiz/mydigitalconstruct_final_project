@@ -189,82 +189,22 @@
               <span class="text-secondary fw-bold">30 done this month</span>
             </div>
             
-            <button type="button" class="btn btn-dark" data-callmodal="call" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-dark" data-callmodal="call" data-bs-toggle="modal" data-bs-target="#modalProject">
               <img src="./assets/img/icons/more_vert.svg" alt="more button" data-callmodal="call"  >
             </button>
             
           </div>
           
-          <!-- Modal add project -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="modal-title">Add article</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Name</label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      id="exampleFormControlInput1" 
-                      placeholder="Enter project name..."
-                    >
-                  </div>
-                  <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                    <textarea 
-                      class="form-control" 
-                      id="exampleFormControlTextarea1" 
-                      rows="3" 
-                      placeholder="Enter project description..."
-                    ></textarea>
-                  </div>
-                  <div class="mb-3">
-                    <label for="exampleFormControlInput2" class="form-label">Author</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="exampleFormControlInput2"
-                      placeholder="Enter author name..."
-                    >
-                  </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                  <p id="modal-error" class="text-start text-danger fs-6"></p>
-                  <div>
-                    <button 
-                      type="button" 
-                      class="btn btn-warning" 
-                      data-bs-toggle="modal" 
-                      data-bs-target="#exampleModalArticle" 
-                      id="add-article" 
-                      disabled
-                    >
-                      Add new article
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-modal">Close</button>
-                    <button type="button" class="btn btn-primary hidden" id="save-project">Save project</button>
-                    <button type="button" class="btn btn-primary hidden" id="save-changes">Save changes</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- -------  -->
-
           <!-- Projects list -->
           <div class="scroll" >
             <p id="no-projects-notify"></p>
             <table class="table table-responsive" id="projects-table" >
               <thead>
               <tr>
-                <th scope="col">№</th>
-                <th scope="col">Title</th>
-                <th scope="col">Description</th>
-                <th scope="col">Author</th>
+                <th scope="col" data-sort="id" class="table-title" data-tooltip="Sort by ID">№</th>
+                <th scope="col" data-sort="title" class="table-title" data-tooltip="Sort by Title">Title</th>
+                <th scope="col" data-sort="description" class="table-title" data-tooltip="Sort by Description">Description</th>
+                <th scope="col" data-sort="author" class="table-title" data-tooltip="Sort by Author">Author</th>
                 <th scope="col" class="text-end">Actions</th>
               </tr>
               </thead>
@@ -279,7 +219,8 @@
             <img src="./assets/img/icons/mark.svg" alt="mark icon">
             <span class="text-secondary fw-bold">Status: active</span>
           </div>
-          
+
+          <!-- Articles list -->
           <div class="scroll">
             <p id="no-articles-notify"></p>
             <div id="articles-list-container">
@@ -287,26 +228,83 @@
             </div>
           </div>
         </div>
-        
-        
-        <!-- Modal add article -->
 
-        <div class="modal fade" id="exampleModalArticle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Modal add project -->
+        <div class="modal fade" id="modalProject" tabindex="-1" aria-labelledby="modalProjectLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModaArticleLabel">Add article</h1>
+                <h5 class="modal-title" id="modal-title">Add article</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="exampleFormControlInput3" class="form-label">Status done (from 0 to 100%)</label>
+                  <label for="project-name" class="form-label">Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="project-name"
+                    placeholder="Enter project name..."
+                  >
+                </div>
+                <div class="mb-3">
+                  <label for="project-description" class="form-label">Description</label>
+                  <textarea
+                    class="form-control"
+                    id="project-description"
+                    rows="3"
+                    placeholder="Enter project description..."
+                  ></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="project-author" class="form-label">Author</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="project-author"
+                    placeholder="Enter author name..."
+                  >
+                </div>
+              </div>
+              <div class="modal-footer justify-content-between">
+                <p id="modal-error" class="text-start text-danger fs-6"></p>
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-warning"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalAddArticle"
+                    id="add-article"
+                    disabled
+                  >
+                    Add new article
+                  </button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-modal">Close</button>
+                  <button type="button" class="btn btn-primary hidden" id="save-project">Save project</button>
+                  <button type="button" class="btn btn-primary hidden" id="save-changes">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Modal add article -->
+        <div class="modal fade" id="modalAddArticle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalArticleLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="article-status" class="form-label">Status done (from 0 to 100%)</label>
                   <input
                     type="number"
                     min="0"
                     max="100"
                     class="form-control"
-                    id="exampleFormControlInput3"
+                    id="article-status"
                   >
                 </div>
                 <div class="mb-3">
@@ -335,15 +333,12 @@
                   <button type="button" class="btn btn-primary" id="save-article">Save article</button>
                   <button type="button" class="btn btn-primary hidden" id="save-edited-article">Save changes</button>
                 </div>
-                
               </div>
             </div>
           </div>
         </div>
         
-        
         <!-- Modal open article -->
-
         <div class="modal" tabindex="-1" id="articleBody">
           <div class="modal-dialog">
             <div class="modal-content">
