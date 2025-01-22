@@ -187,9 +187,9 @@ function addArticleHandler() {
       parentProject: checkedProject.id
     })
   } else {
-    const sortedArticles = articlesList.sort((a,b) => a.id - b.id);
-    currentId = sortedArticles.at(-1).id;
-
+    const idArray = articlesList.map(art => art.id);
+    currentId = Math.max(...idArray)
+    
     projects[checkedProjectIndex].articles.push({
       id: ++currentId,
       title,

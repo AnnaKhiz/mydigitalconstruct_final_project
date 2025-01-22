@@ -111,7 +111,6 @@ function tableSort(value) {
 }
 
 export function checkEmptyFields(container, ...fields) {
-  console.log('empty', fields.some(el => el.trim() === ''))
   if (fields.some(el => el.trim() === '')) {
     container.innerText = 'Empty fields!';
     return;

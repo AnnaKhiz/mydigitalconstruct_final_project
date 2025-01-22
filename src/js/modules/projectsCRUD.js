@@ -35,15 +35,14 @@ export function addNewProject() {
     
     if (!projects.length) {
       projects.push({ id: 1, title, description, author, articles: [] });
-      localStorage.setItem('db_projects', JSON.stringify(projects));
     } else {
-      const sortedProjects = projects.sort((a,b) => a.id - b.id);
-      currentId = sortedProjects.at(-1).id;
-      sortedProjects.push({ id: ++currentId, title, description, author, articles: []  });
-      localStorage.setItem('db_projects', JSON.stringify(sortedProjects));
+      const idArray = projects.map(project => project.id);
+      currentId = Math.max(...idArray)
+      projects.push({ id: ++currentId, title, description, author, articles: []  });
     }
 
-    renderProjectsData();
+    renderProjectsData(projects);
+    
     updateDoughnut();
     updateLinear();
 
@@ -96,6 +95,8 @@ export function renderProjectsData( items = []) {
       </tr>
       `).join('')}
    `)
+
+  localStorage.setItem('db_projects', JSON.stringify(projects));
 }
 export function getAllProjects() {
   return localStorage.getItem('db_projects') ? JSON.parse(localStorage.getItem('db_projects')) : [];
@@ -109,9 +110,7 @@ export function removeProject(projectId) {
     if (index === -1) return;
     
     projects.splice(index, 1);
-    localStorage.setItem('db_projects', JSON.stringify(projects));
-    
-    renderProjectsData();
+    renderProjectsData(projects);
 
     const { articles, published, inProgress, started } = getAllArticlesQuantity();
     updateLinear();
@@ -131,7 +130,7 @@ export function editProject(id) {
   if (checkedProjectIndex === -1) return;
 
   checkedProject = projects[checkedProjectIndex];
- 
+  
   titleElement.value = checkedProject.title;
   descriptionElement.value = checkedProject.description;
   authorElement.value = checkedProject.author;
@@ -143,29 +142,26 @@ export function editProject(id) {
   addArticleButton.disabled = false;
   
   const saveChangesButton = document.getElementById('save-changes');
-
+  
   saveChangesButton.addEventListener('click', () => {
     
     if (!checkEmptyFields(errorMessage, titleElement.value, descriptionElement.value, authorElement.value)) return;
-   
+
     projects[checkedProjectIndex] = {
-      id: checkedProject.id,
+      ...checkedProject,
       title: titleElement.value,
       description: descriptionElement.value,
       author: authorElement.value,
       articles: checkedProject.articles
     }
     
-    localStorage.setItem('db_projects', JSON.stringify(projects));
+    renderProjectsData(projects);
    
     const { articles, published, inProgress, started } = getAllArticlesQuantity();
     updateDoughnut();
     updateLinear();
 
     updateStatistic(projects, articles);
-   
-    renderProjectsData();
-    renderArticles(projects[checkedProjectIndex].id);
     closeModal('modalProject');
   })
 
