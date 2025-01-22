@@ -1,13 +1,11 @@
 import * as bootstrap from 'bootstrap';
-export const titleElement = document.getElementById('project-name');
-export const descriptionElement = document.getElementById('project-description');
-export const authorElement = document.getElementById('project-author');
-
-export const errorMessage = document.getElementById('modal-error');
-export const modalTitle = document.getElementById('modal-title');
+const titleElement = document.getElementById('project-name');
+const descriptionElement = document.getElementById('project-description');
+const authorElement = document.getElementById('project-author');
+const modalTitle = document.getElementById('modal-title');
 const dialogElement = document.getElementById('modalProject');
+const addArticle = document.getElementById('add-article');
 
-export const addArticle = document.getElementById('add-article');
 dialogElement.addEventListener('hide.bs.modal', (e) => {
   titleElement.value = '';
   descriptionElement.value = '';
@@ -28,7 +26,6 @@ export function closeModal(name) {
 
 export function openModal(name) {
   const dialogElement = document.getElementById(name);
-  console.log(dialogElement)
   const modal = bootstrap.Modal.getOrCreateInstance(dialogElement);
   modal.show();
 }

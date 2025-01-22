@@ -1,8 +1,10 @@
 import Chart from 'chart.js/auto';
+import { getAllProjects } from "./projectsCRUD";
+import { getAllArticlesQuantity } from "./articlesCRUD";
 
 let chartLinear;
-export function createLinear(projects, articles) {
-  
+let chartDoughnut;
+function createLinear(projects, articles) {
   if (chartLinear) {
     chartLinear.data.labels = projects;
     chartLinear.data.datasets[0].data = articles;
@@ -71,11 +73,7 @@ export function createLinear(projects, articles) {
   
   return chartLinear;
 }
-
-let chartDoughnut;
-
-export function createDoughnutChart(data) {
-  
+function createDoughnutChart(data) {
   if (chartDoughnut) {
     chartDoughnut.data.datasets[0].data = data;
     chartDoughnut.update();
@@ -85,10 +83,8 @@ export function createDoughnutChart(data) {
   const canvasDoughnut = document.getElementById('my-chart-doughnut');
 
   if (!canvasDoughnut) {
-    console.error('Canvas element with id "canvasDoughnut" not found.');
     return;
   }
-  console.log('create new chart')
   const ctxD = canvasDoughnut.getContext('2d');
   
   chartDoughnut = new Chart(ctxD, {
@@ -120,6 +116,26 @@ export function createDoughnutChart(data) {
     },
   })
   
-  return chartDoughnut
+  return chartDoughnut;
+}
+export function updateLinear() {
+  const projects = getAllProjects();
+
+  const projectTitles = projects.map(project => {
+    const articles = project.articles.length ? project.articles : []
+    return {
+      key: project.title,
+      value: articles.length
+    }
+  })
+
+  const projectsArgs = projectTitles.map(el => el.key);
+  const articlesArgs = projectTitles.map(el => el.value);
   
+  createLinear(projectsArgs, articlesArgs);
+}
+export function updateDoughnut() {
+  const { published, inProgress, started } = getAllArticlesQuantity();
+  
+  createDoughnutChart([published, inProgress, started]);
 }
