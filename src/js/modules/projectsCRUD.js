@@ -1,59 +1,43 @@
-import {
-  openModal,
-  titleElement,
-  descriptionElement,
-  authorElement,
-  errorMessage,
-  modalTitle,
-  closeModal,
-  addArticle
+import { openModal, closeModal } from "./modal";
+import { checkEmptyFields, updateStatistic, switchButtonsVisibility } from "./main";
+import { renderArticles, getAllArticlesQuantity, addNewArticle } from "./articlesCRUD";
+import { updateDoughnut, updateLinear } from "./chart";
 
-} from "./modal";
-import {checkEmptyFields} from "./main";
-import {renderArticles, getAllArticlesQuantity, addNewArticle, updateDoughnut, updateLinear} from "./articlesCRUD";
-import {createDoughnutChart, createLinear} from "./chart";
-
-export const projectsList = document.getElementById('projects-list');
+const authorElement = document.getElementById('project-author');
+const descriptionElement = document.getElementById('project-description');
+const titleElement = document.getElementById('project-name');
+const modalTitle = document.getElementById('modal-title');
+const projectsList = document.getElementById('projects-list');
 const noProjectsNotify = document.getElementById('no-projects-notify');
 const tableElement = document.getElementById('projects-table');
-const projectsQuantity = document.getElementById('projects-quantity');
-const articlesQuantity = document.getElementById('articles-quantity');
-const totalQuantity = document.getElementById('total-quantity');
+const errorMessage = document.getElementById('modal-error');
 
 export let checkedProject;
 export let checkedProjectIndex;
 
 export function addNewProject() {
-  const addArticleButton = document.getElementById('add-article');
-  if (addArticleButton.classList.contains('hidden')) {
-    addArticleButton.classList.remove('hidden')
-  }
+  switchButtonsVisibility('add-article', 'save-project', 'save-changes', 'add');
 
   errorMessage.innerText = '';
   const saveProjectButton = document.getElementById('save-project');
-  saveProjectButton.classList.remove('hidden')
-  const saveChangesButton = document.getElementById('save-changes');
-  saveChangesButton.classList.add('hidden')
+  
   saveProjectButton.addEventListener('click', () => {
-
-
+    
     const title = titleElement.value;
     const description = descriptionElement.value;
     const author = authorElement.value;
 
-
-    if(!checkEmptyFields(title, description, author)) return;
+    if(!checkEmptyFields(errorMessage, title, description, author)) return;
 
     const projects = getAllProjects();
 
     let currentId;
+    
     if (!projects.length) {
       projects.push({ id: 1, title, description, author, articles: [] });
       localStorage.setItem('db_projects', JSON.stringify(projects));
     } else {
-
-      const sortedProjects = projects.sort((a,b) => a.id - b.id)
-      console.log(sortedProjects)
+      const sortedProjects = projects.sort((a,b) => a.id - b.id);
       currentId = sortedProjects.at(-1).id;
       sortedProjects.push({ id: ++currentId, title, description, author, articles: []  });
       localStorage.setItem('db_projects', JSON.stringify(sortedProjects));
@@ -70,30 +54,27 @@ export function addNewProject() {
 }
 export function renderProjectsData( items = []) {
   let projects;
+  
   if (!items.length) {
     projects = getAllProjects();
   } else {
-    projects = items
+    projects = items;
   }
   
-
   if (!projects.length) {
     tableElement.classList.add('hidden');
     noProjectsNotify.innerText = 'No projects yet';
-    return
+    return;
   }
   
   tableElement.classList.remove('hidden');
   noProjectsNotify.innerText = '';
   projectsList.innerHTML = '';
   
-  projectsQuantity.innerText = projects.length;
-  const { articles, published, inProgress, started } = getAllArticlesQuantity();
-  totalQuantity.innerText = projects.length + articles;
-
-  // createLinear(['project_1', 'project_2', 'project_3', 'project_4'], [15, 85, 24, 44])
-
-  createDoughnutChart([published, inProgress, started])
+  const { articles } = getAllArticlesQuantity();
+  updateStatistic(projects, articles)
+  updateDoughnut();
+  updateLinear();
   
   projectsList.insertAdjacentHTML('beforeend', `
     ${projects.map(project =>
@@ -116,115 +97,87 @@ export function renderProjectsData( items = []) {
       `).join('')}
    `)
 }
-
 export function getAllProjects() {
   return localStorage.getItem('db_projects') ? JSON.parse(localStorage.getItem('db_projects')) : [];
 }
 
-export function removeProject() {
-  projectsList.addEventListener('click', (event) => {
-    event.preventDefault();
-    const projectId = +event.target.dataset.delete;
+export function removeProject(projectId) {
     const projects = getAllProjects();
     if (!projects.length) return;
     
-    const index = projects.findIndex(project => +project.id === projectId);
+    const index = projects.findIndex(project => +project.id === +projectId);
     if (index === -1) return;
-    projects.splice(index, 1);
-    projectsQuantity.innerText = projects.length;
     
+    projects.splice(index, 1);
     localStorage.setItem('db_projects', JSON.stringify(projects));
+    
     renderProjectsData();
 
     const { articles, published, inProgress, started } = getAllArticlesQuantity();
-    createDoughnutChart([published, inProgress, started])
-    
-    articlesQuantity.innerText = articles;
+    updateLinear();
+    updateDoughnut();
 
-    totalQuantity.innerText = projects.length + articles;
-  })
-}
-
-export function finishProject() {
-  projectsList.addEventListener('click', (event) => {
-    event.preventDefault();
-    const projectId = +event.target.dataset.done;
-    const projects = getAllProjects();
-    
-    if (!projects.length) return;
-    const index = projects.findIndex(project => +project.id === projectId);
-    if (index === -1) return;
-    
-    projects[index].status = 100;
-    localStorage.setItem('db_projects', JSON.stringify(projects));
-
-    renderProjectsData();
-  })
+    updateStatistic(projects, articles);
 }
 
 export function editProject(id) {
   const addArticleButton = document.getElementById('add-article');
-  if (addArticleButton.classList.contains('hidden')) {
-    addArticleButton.classList.remove('hidden')
-  }
   errorMessage.innerText = '';
-    const projectId = +id;
-    const projects = getAllProjects();
-    if (!projects.length) return;
-    
-    checkedProjectIndex = projects.findIndex(project => +project.id === projectId);
-    if(checkedProjectIndex === -1) return;
-
-    checkedProject = projects[checkedProjectIndex];
-    titleElement.value = checkedProject.title;
-    descriptionElement.value = checkedProject.description;
-    authorElement.value = checkedProject.author;
-
-    openModal('modalProject');
-    const saveChangesButton = document.getElementById('save-changes');
-    const saveProjectButton = document.getElementById('save-project');
-    saveProjectButton.classList.add('hidden');
-    saveChangesButton.classList.remove('hidden');
-    
-    modalTitle.innerText = 'Edit project';
-    addArticle.disabled = false;
-
-    saveChangesButton.addEventListener('click', () => {
-      
-      if (!checkEmptyFields(titleElement.value, descriptionElement.value, authorElement.value)) return;
-      
-      projects[checkedProjectIndex] = {
-        id: checkedProject.id,
-        title: titleElement.value,
-        description: descriptionElement.value,
-        author: authorElement.value,
-        articles: checkedProject.articles
-      }
-      
-      localStorage.setItem('db_projects', JSON.stringify(projects));
-      projectsQuantity.innerText = projects.length;
-      const { articles, published, inProgress, started } = getAllArticlesQuantity();
-      createDoughnutChart([published, inProgress, started])
-      articlesQuantity.innerText = articles;
-
-      totalQuantity.innerText = projects.length + articles;
-      renderProjectsData();
-      renderArticles(checkedProjectIndex)
-      closeModal('modalProject');
-    })
+  const projectId = +id;
+  const projects = getAllProjects();
+  if (!projects.length) return;
   
-  addArticle.addEventListener('click', addNewArticle);
+  checkedProjectIndex = projects.findIndex(project => +project.id === projectId);
+  if (checkedProjectIndex === -1) return;
+
+  checkedProject = projects[checkedProjectIndex];
+ 
+  titleElement.value = checkedProject.title;
+  descriptionElement.value = checkedProject.description;
+  authorElement.value = checkedProject.author;
+
+  openModal('modalProject');
+  switchButtonsVisibility('add-article', 'save-project', 'save-changes', 'edit');
+  
+  modalTitle.innerText = 'Edit project';
+  addArticleButton.disabled = false;
+  
+  const saveChangesButton = document.getElementById('save-changes');
+
+  saveChangesButton.addEventListener('click', () => {
+    
+    if (!checkEmptyFields(errorMessage, titleElement.value, descriptionElement.value, authorElement.value)) return;
+   
+    projects[checkedProjectIndex] = {
+      id: checkedProject.id,
+      title: titleElement.value,
+      description: descriptionElement.value,
+      author: authorElement.value,
+      articles: checkedProject.articles
+    }
+    
+    localStorage.setItem('db_projects', JSON.stringify(projects));
+   
+    const { articles, published, inProgress, started } = getAllArticlesQuantity();
+    updateDoughnut();
+    updateLinear();
+
+    updateStatistic(projects, articles);
+   
+    renderProjectsData();
+    renderArticles(projects[checkedProjectIndex].id);
+    closeModal('modalProject');
+  })
+
+  addArticleButton.addEventListener('click', addNewArticle);
 }
 
 export function filterProjects() {
-  console.log('i m filter prod')
-  
   const titleElement = document.getElementById('filter-project-title');
   const authorElement = document.getElementById('filter-project-author');
   const articlesElement = document.getElementById('filter-articles');
   const filterButton = document.getElementById('filter-button');
-
-
+  
   filterButton.addEventListener('click', (event) => {
     const title = titleElement.value?.trim() || '';
     const author = authorElement.value?.trim() || '';
@@ -232,29 +185,28 @@ export function filterProjects() {
     
     switch(true) {
       case title && author && isHasArticles:
-        filterProjectsBy(['author', 'title', 'articles'], [author, title, isHasArticles])
+        filterProjectsBy(['author', 'title', 'articles'], [author, title, isHasArticles]);
         break;
       case title && isHasArticles:
-        filterProjectsBy(['title', 'articles'], [title, isHasArticles])
+        filterProjectsBy(['title', 'articles'], [title, isHasArticles]);
         break;
       case author && isHasArticles:
-        filterProjectsBy(['author', 'articles'], [author, isHasArticles])
+        filterProjectsBy(['author', 'articles'], [author, isHasArticles]);
         break;
       case !!title && !!author:
-        filterProjectsBy(['author', 'title'], [author, title])
+        filterProjectsBy(['author', 'title'], [author, title]);
         break;
       case !!title:
-        filterProjectsBy(['title'], [title])
+        filterProjectsBy(['title'], [title]);
         break;
       case !!author:
-        filterProjectsBy(['author'], [author])
+        filterProjectsBy(['author'], [author]);
         break;
       case isHasArticles:
-        filterProjectsBy(['articles'], [isHasArticles])
+        filterProjectsBy(['articles'], [isHasArticles]);
         break;
-      
       default:
-        filterProjectsBy([], [])
+        filterProjectsBy([], []);
     }
   })
 
@@ -284,10 +236,9 @@ function filterProjectsBy(fields, value) {
       if (project[field].includes(value[i]) && !filtered.find(el => +el.id === +project.id)) {
         filtered.push(project)
       }
-  }
+    }
   });
   
   renderProjectsData(filtered);
   closeModal('filterModal');
 }
-
