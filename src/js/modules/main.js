@@ -86,7 +86,7 @@ function logOut() {
   document.addEventListener('click', (event) => {
     if (event.target.dataset.id === 'logout') {
       localStorage.removeItem('db_token');
-      document.location.href = '/';
+      document.location.href = 'index.html';
     }
   })
 }
