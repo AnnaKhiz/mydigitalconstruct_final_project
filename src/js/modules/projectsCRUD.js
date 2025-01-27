@@ -51,10 +51,10 @@ export function addNewProject() {
     closeModal('modalProject');
   })
 }
-export function renderProjectsData( items = []) {
+export function renderProjectsData( items = [], filter = false) {
   let projects;
-  
-  if (!items.length) {
+ 
+  if (!items.length && !filter) {
     projects = getAllProjects();
   } else {
     projects = items;
@@ -85,10 +85,10 @@ export function renderProjectsData( items = []) {
         <td class="text-end">
           <div class="d-flex align-items-center justify-content-end gap-2" >
             <button type="button" class="btn btn-sm actions " >
-                <img src="../../assets/img/icons/edit.png" data-edit="${project.id}" alt="edit icon">
+                <img src="./assets/img/icons/edit.png" data-edit="${project.id}" alt="edit icon">
             </button>
             <button type="button" class="btn btn-sm actions"  >
-                <img src="../../assets/img/icons/delete.png" data-delete="${project.id}" alt="delete icon">
+                <img src="./assets/img/icons/delete.png" data-delete="${project.id}" alt="delete icon">
             </button>
           </div>
         </td>
@@ -96,7 +96,12 @@ export function renderProjectsData( items = []) {
       `).join('')}
    `)
 
+  if (filter) {
+    return
+  }
+  
   localStorage.setItem('db_projects', JSON.stringify(projects));
+  
 }
 export function getAllProjects() {
   return localStorage.getItem('db_projects') ? JSON.parse(localStorage.getItem('db_projects')) : [];
@@ -110,6 +115,14 @@ export function removeProject(projectId) {
     if (index === -1) return;
     
     projects.splice(index, 1);
+    
+    console.log(projects)
+  
+    if(!projects.length) {
+      localStorage.removeItem('db_projects');
+      renderProjectsData();
+      return;
+    }
     renderProjectsData(projects);
 
     const { articles, published, inProgress, started } = getAllArticlesQuantity();
@@ -235,6 +248,11 @@ function filterProjectsBy(fields, value) {
     }
   });
   
-  renderProjectsData(filtered);
+  if (!filtered.length) {
+    renderProjectsData([], true);
+    closeModal('filterModal');
+  }
+  
+  renderProjectsData(filtered, true);
   closeModal('filterModal');
 }

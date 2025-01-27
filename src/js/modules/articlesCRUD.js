@@ -83,10 +83,10 @@ export function renderArticles(id) {
               <a href="#" class="d-block btn btn-primary btn-sm" data-openart="${article.id}">Open</a>
               <div class="d-flex align-items-center justify-content-end gap-2">
                 <a href="#" class="d-block btn btn-sm actions" >
-                  <img src="../../assets/img/icons/edit.png" data-editart="${article.id}" alt="edit icon">
+                  <img src="./assets/img/icons/edit.png" data-editart="${article.id}" alt="edit icon">
                 </a>
                 <a href="#" class="d-block btn btn-sm actions" >
-                  <img src="../../assets/img/icons/delete.png" data-delart="${article.id}" alt="delete icon">
+                  <img src="./assets/img/icons/delete.png" data-delart="${article.id}" alt="delete icon">
                 </a>
             </div>
             </div>
@@ -113,6 +113,7 @@ export function getAllArticlesQuantity() {
 
     started += project.articles.length ? project.articles.filter(el => +el.status > 0 && +el.status < 50).length : 0;
   })
+  
   return { articles, published, inProgress, started };
 }
 export function removeArticle(id) {
@@ -136,8 +137,9 @@ export function removeArticle(id) {
   const { articles } = getAllArticlesQuantity();
   
   updateStatistic(projects, articles);
-  updateDoughnut();
   updateLinear();
+  updateDoughnut();
+  
 }
 export function addNewArticle() {
   switchButtonsVisibility('add-article', 'save-article', 'save-edited-article', 'add')
@@ -152,8 +154,7 @@ export function addNewArticle() {
   statusElement.value = '';
 
   saveArticle.addEventListener('click', addArticleHandler);
-  updateDoughnut();
-  updateLinear();
+  
   
   addArticle.removeEventListener('click', addNewArticle);
 }

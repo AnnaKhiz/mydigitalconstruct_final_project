@@ -1,6 +1,6 @@
 import { validateForm } from "./validation";
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.location.pathname === '/') {
+  if (document.location.href.includes('dashboard/') || document.location.href.includes('index.html')) {
     const emailElement = document.getElementById('email-log');
     const passwordElement = document.getElementById('password-log');
     const signInButton = document.getElementById('sign-in-button');

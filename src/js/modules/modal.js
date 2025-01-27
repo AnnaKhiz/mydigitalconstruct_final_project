@@ -6,17 +6,21 @@ const modalTitle = document.getElementById('modal-title');
 const dialogElement = document.getElementById('modalProject');
 const addArticle = document.getElementById('add-article');
 
-dialogElement.addEventListener('hide.bs.modal', (e) => {
-  titleElement.value = '';
-  descriptionElement.value = '';
-  authorElement.value = '';
-})
+if (document.location.href.includes('main.html')) {
+  dialogElement.addEventListener('hide.bs.modal', (e) => {
+    titleElement.value = '';
+    descriptionElement.value = '';
+    authorElement.value = '';
+  })
 
-dialogElement.addEventListener('show.bs.modal', (e) => {
-  modalTitle.innerText = 'Add new project';
-  addArticle.disabled = true;
-  console.log('modal here')
-})
+  dialogElement.addEventListener('show.bs.modal', (e) => {
+    modalTitle.innerText = 'Add new project';
+    addArticle.disabled = true;
+    console.log('modal here')
+  })
+
+  
+}
 
 export function closeModal(name) {
   const dialogElement = document.getElementById(name);
@@ -29,4 +33,5 @@ export function openModal(name) {
   const modal = bootstrap.Modal.getOrCreateInstance(dialogElement);
   modal.show();
 }
+
 
