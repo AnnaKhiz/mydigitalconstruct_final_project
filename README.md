@@ -8,7 +8,7 @@
 
 # How to use?
 
-- For sign up/sign was used mocked data.
+- For sign up/sign were used mocked data.
 
   For ``signin`` use:
   - Email: eve.holt@reqres.in
