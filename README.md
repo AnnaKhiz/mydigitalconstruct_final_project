@@ -21,7 +21,7 @@
   - Submit password: should be the same as entered password
 
 # Project description and requirements:
-  - Sign in/Sign up/Log out functions (created with mocked data)
+  - Sign in/Sign up functions (created with mocked data)
   - Work with LocalStorage
   - Display projects list and all CRUD operations with it (by working with LocalStorage)
   - Add new project and add new articles to that project
