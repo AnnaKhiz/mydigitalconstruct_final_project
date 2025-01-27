@@ -3,7 +3,7 @@ import { getAllProjects } from "./projectsCRUD";
 import { getAllArticlesQuantity } from "./articlesCRUD";
 
 let chartLinear;
-let chartDoughnut;
+
 function createLinear(projects, articles) {
   if (chartLinear) {
     chartLinear.data.labels = projects;
@@ -73,13 +73,50 @@ function createLinear(projects, articles) {
   
   return chartLinear;
 }
-function createDoughnutChart(data) {
+
+let chartDoughnut;
+function createDoughnutChart(data1) {
+
+  const reactiveData = new Proxy(
+    data1, // Исходные данные
+    {
+      set(target, prop, value) {
+        target[prop] = value;
+        if (chartDoughnut) {
+          chartDoughnut.data.datasets[0].data = target.every(v => v === 0) ? [1] : [...target];
+          chartDoughnut.data.datasets[0].backgroundColor = target.every(v => v === 0)
+            ? ['#c7c7c7']
+            : ['rgba(25,135,84,0.93)', 'rgb(255, 205, 86)', 'rgba(220,53,69,0.94)'];
+          chartDoughnut.update(); // Обновляем диаграмму
+        }
+        return true;
+      },
+    }
+  );
+  
+  const data = reactiveData
+  
+  
+  
+  const isAllZero = data.every(value => value === 0);
+  
+  const chartData = isAllZero ? [1, 0, 0] : data;
+  const bg = isAllZero ? ['#c7c7c7'] : [
+    'rgba(25,135,84,0.93)',
+    'rgb(255, 205, 86)',
+    'rgba(220,53,69,0.94)'
+  ]
+  
+  console.log('chartData', chartData)
+  console.log('bg', bg)
+  
   if (chartDoughnut) {
-    chartDoughnut.data.datasets[0].data = data;
+    chartDoughnut.data.datasets[0].data = chartData;
+    chartDoughnut.data.datasets[0].backgroundColor = bg;
     chartDoughnut.update();
     return chartDoughnut
   }
-
+  
   const canvasDoughnut = document.getElementById('my-chart-doughnut');
 
   if (!canvasDoughnut) {
@@ -97,12 +134,8 @@ function createDoughnutChart(data) {
       ],
       datasets: [{
         label: 'Articles',
-        data: data,
-        backgroundColor: [
-          'rgba(25,135,84,0.93)',
-          'rgb(255, 205, 86)',
-          'rgba(220,53,69,0.94)'
-        ],
+        data: chartData,
+        backgroundColor: bg,
         hoverOffset: 4
       }],
     },
@@ -111,6 +144,9 @@ function createDoughnutChart(data) {
       plugins: {
         legend: {
           display: false
+        },
+        tooltip: {
+          enabled: !isAllZero,
         }
       },
     },
@@ -135,7 +171,23 @@ export function updateLinear() {
   createLinear(projectsArgs, articlesArgs);
 }
 export function updateDoughnut() {
-  const { published, inProgress, started } = getAllArticlesQuantity();
+  const { articles, published, inProgress, started } = getAllArticlesQuantity();
+  // const message = document.getElementById('chart-message');
+  // const chart = document.getElementById('my-chart-doughnut');
+
+  // if (articles == 0) {
+  //   console.log(articles)
+  //   message.classList.remove('hidden');
+  //   chart.classList.add('hidden');
+  //   // createDoughnutChart([1]);
+  // } else {
+  //   message.classList.add('hidden');
+  //   chart.classList.remove('hidden')
+  // }
   
   createDoughnutChart([published, inProgress, started]);
+  
+  
+  
+  
 }

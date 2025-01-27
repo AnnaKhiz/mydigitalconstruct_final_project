@@ -17,58 +17,60 @@ const projectsContainer = document.getElementById('projects-container');
 const articlesListContainer = document.getElementById('articles-list-container');
 let sortOrder = {};
 document.addEventListener('DOMContentLoaded', () => {
-  const projects = !getAllProjects().length ? '0' : getAllProjects().length;
-  const { articles } = getAllArticlesQuantity();
+  if (document.location.href.includes('main.html')) {
+    const projects = !getAllProjects().length ? 0 : getAllProjects().length;
+    const {articles} = getAllArticlesQuantity();
 
-  updateStatistic(projects, articles);
-  updateDoughnut();
-  updateLinear();
-  renderProjectsData();
-  
-  projectsContainer.addEventListener('click', (e) => {
-    switch(true) {
-      case e.target.dataset.bsTarget === '#filterModal':
-        filterProjects();
-        break;
-      case e.target.dataset.hasOwnProperty('sort'):
-        tableSort(e.target.dataset.sort);
-        break;
-      case e.target.dataset.hasOwnProperty('edit'):
-        editProject(e.target.dataset.edit);
-        break;
-      case e.target.dataset.hasOwnProperty('delete'):
-        removeProject(e.target.dataset.delete);
-        break;
-      case e.target.dataset.hasOwnProperty('callmodal'):
-        addNewProject();
-        break;
-      case !!e.target.closest('tr'):
-        saveRowId(e.target.closest('tr'));
-        break;
-      default:
-        return;
-    }
-    
-    articlesListContainer.addEventListener('click', (e) => {
-      switch(true) {
-        case e.target.dataset.hasOwnProperty('openart'):
-          openArticle(e.target.dataset.openart);
+    updateStatistic(projects, articles);
+    updateDoughnut();
+    updateLinear();
+    renderProjectsData();
+
+    projectsContainer.addEventListener('click', (e) => {
+      switch (true) {
+        case e.target.dataset.bsTarget === '#filterModal':
+          filterProjects();
           break;
-        case e.target.dataset.hasOwnProperty('delart'):
-          removeArticle(e.target.dataset.delart);
+        case e.target.dataset.hasOwnProperty('sort'):
+          tableSort(e.target.dataset.sort);
           break;
-        case e.target.dataset.hasOwnProperty('editart'):
-          editArticle(e.target.dataset.editart);
+        case e.target.dataset.hasOwnProperty('edit'):
+          editProject(e.target.dataset.edit);
+          break;
+        case e.target.dataset.hasOwnProperty('delete'):
+          removeProject(e.target.dataset.delete);
+          break;
+        case e.target.dataset.hasOwnProperty('callmodal'):
+          addNewProject();
+          break;
+        case !!e.target.closest('tr'):
+          saveRowId(e.target.closest('tr'));
           break;
         default:
           return;
       }
+
+      articlesListContainer.addEventListener('click', (e) => {
+        switch (true) {
+          case e.target.dataset.hasOwnProperty('openart'):
+            openArticle(e.target.dataset.openart);
+            break;
+          case e.target.dataset.hasOwnProperty('delart'):
+            removeArticle(e.target.dataset.delart);
+            break;
+          case e.target.dataset.hasOwnProperty('editart'):
+            editArticle(e.target.dataset.editart);
+            break;
+          default:
+            return;
+        }
+      })
     })
-  })
-  
-  
-  if (document.location.href.includes('main.html')) {
-    logOut();
+
+
+    if (document.location.href.includes('main.html')) {
+      logOut();
+    }
   }
 })
 
