@@ -8,12 +8,12 @@
 
 # How to use?
 
-- For sign up/sign in was user mocked data.
-  For #signin use:
+- For sign up/sign was used mocked data.
+  For ``signin`` use:
   - Login: eve.holt@reqres.in
   - Password: any 6 digits
  
-    For #signup use:
+    For ``signup`` use:
   - Login: eve.holt@reqres.in
   - Password: any 6 digits
   - submit password: shoul be the same as entered password
