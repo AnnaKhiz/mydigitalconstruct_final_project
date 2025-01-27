@@ -17,7 +17,7 @@
   For ``signup`` use:
   - Email: eve.holt@reqres.in
   - Password: any 6 digits
-  - Submit password: shoul be the same as entered password
+  - Submit password: should be the same as entered password
 
 # Project description and requirements:
   - Sign in/Sign up/Log out functions (created with mocked data)
