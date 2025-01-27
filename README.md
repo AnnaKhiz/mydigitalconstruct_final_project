@@ -5,6 +5,7 @@
 - CSS/SCSS
 - Bootstrap
 - Chart.js
+- Webpack
 
 # How to use?
 
