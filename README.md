@@ -5,9 +5,23 @@
 - CSS/SCSS
 - Bootstrap
 - Chart.js
+- Webpack
 
-  Simple dashboard, which includes:
-  - Sign in/Sign up/Log out functions (created with mocked data)
+# How to use?
+
+- For sign up/sign were used mocked data.
+
+  For ``signin`` use:
+  - Email: eve.holt@reqres.in
+  - Password: any 6 digits
+ 
+  For ``signup`` use:
+  - Email: eve.holt@reqres.in
+  - Password: any 6 digits
+  - Submit password: should be the same as entered password
+
+# Project description and requirements:
+  - Sign in/Sign up functions (created with mocked data)
   - Work with LocalStorage
   - Display projects list and all CRUD operations with it (by working with LocalStorage)
   - Add new project and add new articles to that project
