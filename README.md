@@ -11,13 +11,13 @@
 - For sign up/sign was used mocked data.
 
   For ``signin`` use:
-  - Login: eve.holt@reqres.in
+  - Email: eve.holt@reqres.in
   - Password: any 6 digits
  
   For ``signup`` use:
-  - Login: eve.holt@reqres.in
+  - Email: eve.holt@reqres.in
   - Password: any 6 digits
-  - submit password: shoul be the same as entered password
+  - Submit password: shoul be the same as entered password
 
 # Project description and requirements:
   - Sign in/Sign up/Log out functions (created with mocked data)
