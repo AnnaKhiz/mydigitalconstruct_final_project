@@ -46,3 +46,4 @@
     - project name
     - project author
     - project articles existing
+  - Search by project title
