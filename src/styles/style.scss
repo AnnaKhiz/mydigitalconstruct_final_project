@@ -75,7 +75,7 @@ body {
 
 .bg-main {
 	height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
 	background: var(--bg-main-gradient);
   &.image {
     padding: 20px;

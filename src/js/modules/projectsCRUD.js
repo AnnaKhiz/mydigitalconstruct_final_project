@@ -115,8 +115,6 @@ export function removeProject(projectId) {
     if (index === -1) return;
     
     projects.splice(index, 1);
-    
-    console.log(projects)
   
     if(!projects.length) {
       localStorage.removeItem('db_projects');
