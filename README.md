@@ -25,7 +25,7 @@
   - Work with LocalStorage
   - Display projects list and all CRUD operations with it (by working with LocalStorage)
   - Add new project and add new articles to that project
-  - All CRUD operstions with articles list (by working with LocalStorage)
+  - All CRUD operations with articles list (by working with LocalStorage)
   - Display article progress status (with progress bar), ability to change status.
   - Statistic by quantity:
     - projects quantity
