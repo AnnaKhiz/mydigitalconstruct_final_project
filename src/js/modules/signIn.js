@@ -1,23 +1,6 @@
-import { validateForm } from "./validation";
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.location.href.includes('dashboard/') || document.location.href.includes('index.html')) {
-    const emailElement = document.getElementById('email-log');
-    const passwordElement = document.getElementById('password-log');
-    const signInButton = document.getElementById('sign-in-button');
-    const messageBlockLog = document.getElementById('message-block');
-    
-    signInButton.addEventListener('click', async (event) => {
-      event.preventDefault();
-      const emailValue = emailElement.value;
-      const passwordValue = passwordElement.value;
-
-      if (!validateForm(messageBlockLog, emailValue, passwordValue)) return;
-
-      await signIn();
-
-    })
-
-    async function signIn() {
+const messageBlock = document.getElementById('message-block');
+const signInButton = document.getElementById('sign-in-button');
+    export async function signIn() {
       try {
         const result = await fetch('https://reqres.in/api/login', {
           method: 'POST',
@@ -33,14 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await result.json();
 
         if (!data.token) {
-          messageBlockLog.innerText = 'Wrong authentication data!';
+          messageBlock.innerText = 'Wrong authentication data!';
           return
         }
 
         localStorage.setItem('db_token', data.token);
 
-        messageBlockLog.innerText = 'Login successful';
-        messageBlockLog.classList.add('success');
+        messageBlock.innerText = 'Login successful';
+        messageBlock.classList.add('success');
         signInButton.style.opacity = '0.7';
         signInButton.innerText = 'Wait'
 
@@ -55,9 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000)
 
       } catch (error) {
-        messageBlockLog.innerText = 'Wrong login or password data!';
+        messageBlock.innerText = 'Wrong login or password data!';
         console.error('Login error', error)
       }
     }
-  }
-})

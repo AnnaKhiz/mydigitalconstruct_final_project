@@ -107,7 +107,6 @@ $root: &;
 .grid-container {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  //grid-template-rows: repeat(8, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
   padding: 20px 0 0 20px;

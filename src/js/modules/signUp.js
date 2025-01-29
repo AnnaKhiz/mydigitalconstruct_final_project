@@ -1,29 +1,6 @@
-import { comparePasswords, validateForm } from "./validation";
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.location.href.includes('signup.html')) {
-    const emailElement = document.getElementById('email-reg');
-    const passwordElement = document.getElementById('password-reg');
-    const passwordConfirmElement = document.getElementById('password-confirm');
-    const signUpButton = document.getElementById('sign-up-button');
-    const messageBlockReg = document.getElementById('reg-message-block');
-
-    signUpButton.addEventListener('click', async (event) => {
-      event.preventDefault();
-
-      const emailValue = emailElement.value;
-      const passwordValue = passwordElement.value;
-      const passwordConfirmValue = passwordConfirmElement.value;
-
-      if (!validateForm(messageBlockReg, emailValue, passwordValue, passwordConfirmValue)) return;
-      
-      if (!comparePasswords(messageBlockReg, passwordValue, passwordConfirmValue)) {
-        return;
-      }
-      await signUp();
-
-    })
-
-    async function signUp() {
+const messageBlockReg = document.getElementById('reg-message-block');
+const signUpButton = document.getElementById('sign-up-button');
+    export async function signUp() {
       try {
         const result = await fetch('https://reqres.in/api/register', {
           method: 'POST',
@@ -61,5 +38,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Login error', error)
       }
     }
-  }
-})

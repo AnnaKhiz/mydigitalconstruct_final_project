@@ -78,7 +78,7 @@ let chartDoughnut;
 function createDoughnutChart(data1) {
 
   const reactiveData = new Proxy(
-    data1, // Исходные данные
+    data1,
     {
       set(target, prop, value) {
         target[prop] = value;
@@ -87,7 +87,7 @@ function createDoughnutChart(data1) {
           chartDoughnut.data.datasets[0].backgroundColor = target.every(v => v === 0)
             ? ['#c7c7c7']
             : ['rgba(25,135,84,0.93)', 'rgb(255, 205, 86)', 'rgba(220,53,69,0.94)'];
-          chartDoughnut.update(); // Обновляем диаграмму
+          chartDoughnut.update();
         }
         return true;
       },
@@ -95,8 +95,6 @@ function createDoughnutChart(data1) {
   );
   
   const data = reactiveData
-  
-  
   
   const isAllZero = data.every(value => value === 0);
   
@@ -107,14 +105,11 @@ function createDoughnutChart(data1) {
     'rgba(220,53,69,0.94)'
   ]
   
-  console.log('chartData', chartData)
-  console.log('bg', bg)
-  
   if (chartDoughnut) {
     chartDoughnut.data.datasets[0].data = chartData;
     chartDoughnut.data.datasets[0].backgroundColor = bg;
     chartDoughnut.update();
-    return chartDoughnut
+    return chartDoughnut;
   }
   
   const canvasDoughnut = document.getElementById('my-chart-doughnut');
@@ -172,22 +167,5 @@ export function updateLinear() {
 }
 export function updateDoughnut() {
   const { articles, published, inProgress, started } = getAllArticlesQuantity();
-  // const message = document.getElementById('chart-message');
-  // const chart = document.getElementById('my-chart-doughnut');
-
-  // if (articles == 0) {
-  //   console.log(articles)
-  //   message.classList.remove('hidden');
-  //   chart.classList.add('hidden');
-  //   // createDoughnutChart([1]);
-  // } else {
-  //   message.classList.add('hidden');
-  //   chart.classList.remove('hidden')
-  // }
-  
   createDoughnutChart([published, inProgress, started]);
-  
-  
-  
-  
 }

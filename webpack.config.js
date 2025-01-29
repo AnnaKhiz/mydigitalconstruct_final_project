@@ -12,7 +12,6 @@ module.exports = {
   },
   module: {
     rules: [
-      
       {
         test: /\.css$/i,
         use: [
@@ -50,10 +49,6 @@ module.exports = {
       template: './src/index.html',
       filename: 'index.html'
     }),
-      new HtmlWebpackPlugin({
-        template: './src/signup.html',
-        filename: 'signup.html'
-      }),
     new HtmlWebpackPlugin({
       template: './src/main.html',
       filename: 'main.html'

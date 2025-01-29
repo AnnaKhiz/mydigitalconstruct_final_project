@@ -13,47 +13,67 @@
   <header class="header-nav shadow">
     <h4>Dashboard system</h4>
     <nav class="nav-list">
-      <a href="signup.html" >Sign up</a>
-      <a href="index.html" class="active">Sign in</a>
+      <a href="#" data-sign-link="sign-up" >Sign up</a>
+      <a href="#" class="active" data-sign-link="sign-in">Sign in</a>
     </nav>
   </header>
 	<main class="row justify-content-start bg-main">
 		<section class="col-6 p-0 image-container">
 			<img src="assets/img/bg_signin.png" alt="background image">
 		</section>
-		<section class="col-6 text-white text-start d-flex justify-center align-items-center py-4 px-40">
+		<section id="form-section" class="col-6 text-white text-start d-flex justify-center align-items-center py-4 px-20">
 			<div class="p-4 w-100">
-				<h3 class="mb-2">Nice to see you!</h3>
-				<p class="mb-8">Enter your email and password to sign in</p>
+        <div class="mb-10 text-center" id="welcome-text">
+          <h3 class="mb-3 fs-3">Nice to see you!</h3>
+          <p >Enter your email and password to sign in</p>
+        </div>
+				
 
 				<form action="#" class="login-form">
-					<div class="mb-3">
-						<label for="email-log" class="d-block mb-1">Email</label>
+					<div class="w-100">
+						<label for="email" class="d-block mb-2">Email</label>
 						<input 
               type="email" 
               placeholder="Your email address" 
-              id="email-log" 
+              id="email" 
               class="form-hover w-100 px-3 py-2 bg-transparent rounded-4 text-white shadow" 
             >
 					</div>
 
-					<div class="mb-12">
-						<label for="password-log" class="d-block mb-1">Password</label>
+					<div class="w-100">
+						<label for="password" class="d-block mb-2">Password</label>
 						<input 
               type="password" 
               placeholder="Your password" 
-              id="password-log" 
+              id="password" 
               class="form-hover w-100 px-3 py-2 bg-transparent rounded-4 text-white shadow"
             >
 					</div>
-          <p class="message-block" id="message-block"></p>
 
-					<button class="button-hover px-3 py-2 rounded-4 w-100 mb-4 text-white bg-primary text-uppercase" id="sign-in-button">
+          <div class="hidden w-100" id="confirm-container">
+            <label for="password-confirm" class="d-block mb-2">Confirm password</label>
+            <input
+              type="password"
+              placeholder="Confirm password"
+              id="password-confirm"
+              class="form-hover w-100 px-3 py-2 bg-transparent rounded-4 text-white shadow"
+            >
+          </div>
+          
+          <p class="message-block" id="message-block"></p>
+          <p class="hidden message-block reg" id="reg-message-block"></p>
+
+					<button class=" button-hover px-3 py-2 rounded-4 w-100 mb-4 mt-8 text-white bg-primary text-uppercase" id="sign-in-button" data-sign-button="sign-in">
 						Sign in
 					</button>
+          <button class=" hidden button-hover px-3 py-2 rounded-4 w-100 mb-4 mt-8 text-white bg-primary text-uppercase" id="sign-up-button" data-sign-button="sign-up">
+            Sign up
+          </button>
 				</form>
 
-				<p class="text-center text-secondary fw-bold">Don't have an account? <a href="signup.html" class="link-hover text-white">Sign up</a></p>
+        <p id="sign-in-link" class="hidden text-center text-secondary fw-bold">Already have an account? <a data-sign-link="sign-in" href="#" class="link-hover text-white">Sign in</a></p>
+				<p id="sign-up-link" class="text-center text-secondary fw-bold">Don't have an account? <a data-sign-link="sign-up" href="#" class="link-hover text-white">Sign up</a></p>
+        
 			</div>
 
 		</section>

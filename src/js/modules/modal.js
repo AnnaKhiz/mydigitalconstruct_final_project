@@ -16,10 +16,7 @@ if (document.location.href.includes('main.html')) {
   dialogElement.addEventListener('show.bs.modal', (e) => {
     modalTitle.innerText = 'Add new project';
     addArticle.disabled = true;
-    console.log('modal here')
   })
-
-  
 }
 
 export function closeModal(name) {
