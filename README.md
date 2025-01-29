@@ -9,6 +9,10 @@
 
 # How to use?
 
+- Open project
+- To install dependencies - ``npm install``
+- To start project with localhost - ``npm run start``
+
 - For sign up/sign were used mocked data.
 
   For ``signin`` use:
