@@ -1,5 +1,5 @@
 import { updateDoughnut, updateLinear } from "./chart.js";
-
+import { searchData } from "./search";
 import {
   openArticle,
   renderArticles,
@@ -15,6 +15,7 @@ import {
 
 const projectsContainer = document.getElementById('projects-container');
 const articlesListContainer = document.getElementById('articles-list-container');
+const searchField = document.getElementById('search-field');
 let sortOrder = {};
 
 if (document.location.href.includes('main.html')) {
@@ -66,8 +67,11 @@ if (document.location.href.includes('main.html')) {
       }
     })
   })
-
-
+  
+  searchField.addEventListener('input', (e) => {
+    searchData(e.target.value)
+  })
+  
   if (document.location.href.includes('main.html')) {
     logOut();
   }
