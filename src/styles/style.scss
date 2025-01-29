@@ -5,6 +5,7 @@
 :root {
 	--bg-main-gradient: linear-gradient(0deg, rgba(15,18,59,1) 0%, rgba(9,13,46,1) 59%, rgba(2,5,21,1) 100%);
   --bg-grid-items-gradient: linear-gradient(0deg, rgba(26,31,55,0) 0%, rgba(6,11,38,0.94) 100%);
+  --bg-shadow: 3px 3px 5px rgba(88, 44, 255, 0.62), -3px -3px 5px rgba(175, 154, 253, 0.41);
 	--warn-red: red;
   --success: green;
   --dark-blue: #1A1F37;
@@ -44,13 +45,17 @@ body {
   }
 }
 
-.login-form {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
- 
+.form-section {
+  @media screen and (max-width: 768px) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    border-radius: 12px;
+    backdrop-filter: blur(42px);
+    box-shadow: var(--bg-shadow);
+  }
 }
 
 .message-block {
@@ -92,6 +97,9 @@ body {
 	transform: translate(-50%);
 	border-radius: 20px;
 	backdrop-filter: blur(42px);
+  @media screen and (max-width: 768px) {
+    min-width: 80%;
+  }
 	& > h4 {
 		margin-bottom: 5px;
 		text-transform: uppercase;

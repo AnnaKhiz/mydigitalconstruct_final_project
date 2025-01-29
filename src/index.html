@@ -9,8 +9,8 @@
 </head>
 
 <body>
-<div class="container-fluid text-center">
-  <header class="header-nav shadow">
+<div class="container-fluid text-center col-12">
+  <header class="header-nav shadow col-6">
     <h4>Dashboard system</h4>
     <nav class="nav-list">
       <a href="#" data-sign-link="sign-up" >Sign up</a>
@@ -18,17 +18,17 @@
     </nav>
   </header>
 	<main class="row justify-content-start bg-main">
-		<section class="col-6 p-0 image-container">
+		<section class="col-sm-12 col-md-6 p-0 image-container">
 			<img src="assets/img/bg_signin.png" alt="background image">
 		</section>
-		<section id="form-section" class="col-6 text-white text-start d-flex justify-center align-items-center py-4 px-20">
-			<div class="p-4 w-100">
+		<section class="col-sm-12 col-md-6 form-section text-white text-start d-flex justify-content-center align-items-center py-4">
+			<div class="p-4 col-xxl-8 col-md-10">
         <div class="mb-10 text-center" id="welcome-text">
           <h3 class="mb-3 fs-3">Nice to see you!</h3>
           <p >Enter your email and password to sign in</p>
         </div>
         
-				<form action="#" class="login-form">
+				<form action="#" class="login-form d-flex flex-column align-items-start gap-5 position-relative w-100">
 					<div class="w-100">
 						<label for="email" class="d-block mb-2">Email</label>
 						<input 
